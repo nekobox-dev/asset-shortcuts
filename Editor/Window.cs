@@ -1,0 +1,141 @@
+#if UNITY_EDITOR
+
+using System.Collections.Generic;
+using UnityEditor;
+using UnityEditorInternal;
+using UnityEngine;
+
+namespace Nekobox.AssetShortcuts
+{
+    [System.Serializable]
+    public class Window : EditorWindow
+    {
+        [SerializeField] private FolderPane folderPane;
+        [SerializeField] private NarrowFolderPane narrowFolderPane;
+        [SerializeField] private ShortcutPane shortcutPane;
+        [SerializeField] private Folder selectedFolder;
+        [SerializeField] private Shortcut selectedShortcut;
+        [SerializeField] private bool isExpanded;
+
+        [MenuItem(Defines.MENU_PATH)]
+        public static void Open()
+        {
+            var window = CreateInstance<Window>();
+            window.titleContent = new GUIContent(Defines.PACKAGE_NAME);
+            window.Show();
+        }
+
+        public void OnEnable()
+        {
+            if (Data.Root.Items.Count == 0) 
+            {
+                var folder = new Folder();
+                folder.Label = "Defaults";
+                folder.Icon = "Folder Icon";
+
+                Data.Root.Items.Add(folder);
+            }
+
+            if (selectedFolder == null && Data.Root.Items.Count > 0)
+            {
+                selectedFolder = Data.Root.Items[0] as Folder;
+            }
+
+            folderPane = new FolderPane();
+            narrowFolderPane = new NarrowFolderPane();
+            shortcutPane = new ShortcutPane();
+
+            folderPane.Initialize();
+            narrowFolderPane.Initialize();
+            shortcutPane.Initialize(selectedFolder);
+
+            folderPane.OnFolderSelected += (folder) =>
+            {
+                selectedFolder = folder;
+                selectedShortcut = null;
+                shortcutPane?.Initialize(folder);
+            };
+            narrowFolderPane.OnFolderSelected += (folder) =>
+            {
+                selectedFolder = folder;
+                selectedShortcut = null;
+                shortcutPane?.Initialize(folder);
+            };
+            shortcutPane.OnShortcutSelected += (shortcut) =>
+            {
+                selectedShortcut = shortcut;
+            };
+
+            folderPane.OnExpansionChanged += (isExpanded) =>
+            {
+                this.isExpanded = isExpanded;
+            };
+            narrowFolderPane.OnExpansionChanged += (isExpanded) =>
+            {
+                this.isExpanded = isExpanded;
+            };
+
+            Data.OnDataChanged += (_) => this.Repaint();
+            Undo.willFlushUndoRecord += () => Data.NotifyChanges("UndoRedo");
+        }
+
+        public void OnDisable()
+        {
+            Data.OnDataChanged -= (_) => this.Repaint();
+            Undo.willFlushUndoRecord -= () => Data.NotifyChanges("UndoRedo");
+        }
+
+        public void OnGUI()
+        {
+            using (new EditorGUILayout.HorizontalScope())
+            {
+                if (isExpanded)
+                {
+                    folderPane.Draw();
+                }
+                else
+                {
+                    narrowFolderPane.Draw();
+                }
+                
+                shortcutPane.Draw();
+            }
+
+            using (new EditorGUILayout.HorizontalScope(EditorStyles.toolbar))
+            {
+                EditorGUILayout.Space();
+                var mag = EditorGUILayout.Slider(Data.UISizeMag, 0.0f, 2.0f, GUILayout.Width(120));
+                
+                if (mag != Data.UISizeMag)
+                {
+                    Data.UISizeMag = Mathf.Round(mag * 10) / 10;
+                    Data.NotifyChanges("UI size changed");
+                }
+            }
+
+            switch (Event.current.type)
+            {
+                case EventType.DragUpdated:
+                    DragAndDrop.visualMode = DragAndDropVisualMode.Copy;
+                    break;
+
+                case EventType.DragPerform:
+                    if (selectedFolder == null) break;
+
+                    DragAndDrop.AcceptDrag();
+
+                    Undo.RecordObject(Data.instance, Defines.LOG_PREFIX + "Shortcut added");
+                    foreach (var obj in DragAndDrop.objectReferences)
+                    {
+                        var shortcut = new Shortcut();
+                        shortcut.Asset = obj;
+                        selectedFolder.Items.Add(shortcut);
+                        Data.NotifyChanges("Shortcut added");
+                    }
+                    break;
+            }
+        }
+    }
+}
+
+#endif // UNITY_EDITOR

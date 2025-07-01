@@ -1,0 +1,16 @@
+{
+  "name": "com.github.nekobox-dev.asset-shortcuts",
+  "displayName": "Asset Shortcuts",
+  "version": "0.1.0",
+  "author": {
+    "name": "Nekobox",
+    "url": "https://github.com/nekobox-dev"
+  },
+  "unity": "2022.3",
+  "description": "Quick ping and select for assets",
+  "vpmDependencies": {},
+  "url": "",
+  "license": "MIT",
+  "licenseUrl": "https://github.com/github/AssetShortcuts/blob/main/LICENSE",
+  "changelogUrl": "https://github.com/github/AssetShortcuts/blob/main/CHANGELOG.md"
+}
