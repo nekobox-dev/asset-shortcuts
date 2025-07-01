@@ -9,7 +9,6 @@
   "unity": "2022.3",
   "description": "Quick ping and select for assets",
   "vpmDependencies": {},
-  "url": "",
   "license": "MIT",
   "licenseUrl": "https://github.com/nekobox-dev/asset-shortcuts/blob/main/LICENSE",
   "changelogUrl": "https://github.com/nekobox-dev/asset-shortcuts/blob/main/CHANGELOG.md"
