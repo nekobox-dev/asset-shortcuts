@@ -265,11 +265,11 @@ namespace Nekobox.AssetShortcuts
             
             reorderableList.drawElementCallback = (rect, index, isActive, isFocused) =>
             {
-                if (index < 0 || index >= folder.Items.Count) return;
-
                 var (iconRect, labelRect) = Utils.GetRectListItem(rect);
                 try
                 {
+                    if (index < 0 || index >= folder.Items.Count) return;
+                    
                     var shortcut = folder.Items[index] as Shortcut;
 
                     var thumbnail = AssetPreview.GetMiniThumbnail(shortcut.Asset);
