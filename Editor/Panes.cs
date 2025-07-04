@@ -268,20 +268,26 @@ namespace Nekobox.AssetShortcuts
                 if (index < 0 || index >= folder.Items.Count) return;
 
                 var (iconRect, labelRect) = Utils.GetRectListItem(rect);
-                
-                var shortcut = folder.Items[index] as Shortcut;
-                if (shortcut == null || shortcut.Asset == null)
+                try
+                {
+                    var shortcut = folder.Items[index] as Shortcut;
+
+                    var thumbnail = AssetPreview.GetMiniThumbnail(shortcut.Asset);
+                    var label = string.IsNullOrEmpty(shortcut.Label) ? shortcut.Asset.name : shortcut.Label;
+
+                    GUI.Label(iconRect, thumbnail);
+                    GUI.Label(labelRect, label);
+                }
+                catch (MissingReferenceException e)
                 {
                     GUI.Label(iconRect, EditorGUIUtility.TrIconContent("Error@2x"));
-                    GUI.Label(labelRect, "Deleted");
-                    return;
+                    GUI.Label(labelRect, "Missing Asset");
                 }
-                
-                var thumbnail = shortcut.Asset != null ? AssetPreview.GetMiniThumbnail(shortcut.Asset) : null;
-                var label = string.IsNullOrEmpty(shortcut.Label) ? shortcut.Asset.name : shortcut.Label;
-                
-                GUI.Label(iconRect, thumbnail);
-                GUI.Label(labelRect, label);
+                catch (System.NullReferenceException e)
+                {
+                    GUI.Label(iconRect, EditorGUIUtility.TrIconContent("Error@2x"));
+                    GUI.Label(labelRect, "Null Reference");
+                }
             };
 
             reorderableList.onSelectCallback = (reorderableList) =>
