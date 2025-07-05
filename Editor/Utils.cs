@@ -1,7 +1,8 @@
 #if UNITY_EDITOR
 
-using System.IO;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
@@ -20,6 +21,32 @@ namespace Nekobox.AssetShortcuts
 
             EditorUtility.SetDirty(obj);
             AssetDatabase.SaveAssets();
+        }
+
+        public static string GetCommonDirectory(string path1, string path2)
+        {
+            if (string.IsNullOrEmpty(path1) || string.IsNullOrEmpty(path2))
+                return string.Empty;
+
+            var parts1 = path1.Replace(@"\", "/").Split("/");
+            var parts2 = path2.Replace(@"\", "/").Split("/");
+
+            var commonParts = parts1.Zip(parts2, (a, b) => a == b ? a : null)
+                .TakeWhile(part => part != null)
+                .ToArray();
+
+            return string.Join("/", commonParts);
+        }
+
+        public static string[] UniformSample(string[] paths, int samplingRate)
+        {
+            var result = new string[samplingRate];
+            for (int i = 0; i < samplingRate; i++)
+            {
+                int index = Mathf.RoundToInt((float)i / (samplingRate - 1) * (paths.Length - 1));
+                result[i] = paths[Mathf.Clamp(index, 0, paths.Length - 1)];
+            }
+            return result;
         }
 
         public static void PingAndSelectionObject(Object obj)
