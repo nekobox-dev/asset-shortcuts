@@ -54,27 +54,35 @@ namespace Nekobox.AssetShortcuts
             leftPane = isExpanded ? folderPane : narrowFolderPane;
             rightPane = shortcutPane;
 
-            var folderSelected = (folder) => 
+
+            folderPane.OnFolderSelected += (folder) => 
             {
                 selectedFolder = folder;
                 selectedShortcut = null;
                 shortcutPane?.Initialize(folder);
             };
-            folderPane.OnFolderSelected += folderSelected;
-            narrowFolderPane.OnFolderSelected += folderSelected;
+            narrowFolderPane.OnFolderSelected += (folder) => 
+            {
+                selectedFolder = folder;
+                selectedShortcut = null;
+                shortcutPane?.Initialize(folder);
+            };
 
             shortcutPane.OnShortcutSelected += (shortcut) =>
             {
                 selectedShortcut = shortcut;
             };
 
-            expansionChanged = (isExpanded) =>
+            folderPane.OnExpansionChanged += (isExpanded) =>
             {
                 this.isExpanded = isExpanded;
                 leftPane = isExpanded ? folderPane : narrowFolderPane;
             };
-            folderPane.OnExpansionChanged += expansionChanged;
-            narrowFolderPane.OnExpansionChanged += expansionChanged;
+            narrowFolderPane.OnExpansionChanged += (isExpanded) =>
+            {
+                this.isExpanded = isExpanded;
+                leftPane = isExpanded ? folderPane : narrowFolderPane;
+            };
 
             Data.OnDataChanged += (_) => this.Repaint();
             Undo.willFlushUndoRecord += () => Data.NotifyChanges("UndoRedo");
