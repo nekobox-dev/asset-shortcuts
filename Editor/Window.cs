@@ -15,6 +15,8 @@ namespace Nekobox.AssetShortcuts
         [SerializeField] private ShortcutPane shortcutPane;
         [SerializeField] private Folder selectedFolder;
         [SerializeField] private Shortcut selectedShortcut;
+        [SerializeField] private IPane leftPane;
+        [SerializeField] private IPane rightPane;
         [SerializeField] private bool isExpanded;
 
         [MenuItem(Defines.MENU_PATH)]
@@ -49,6 +51,9 @@ namespace Nekobox.AssetShortcuts
             narrowFolderPane.Initialize();
             shortcutPane.Initialize(selectedFolder);
 
+            leftPane = isExpanded ? folderPane : narrowFolderPane;
+            rightPane = shortcutPane;
+
             folderPane.OnFolderSelected += (folder) =>
             {
                 selectedFolder = folder;
@@ -69,10 +74,12 @@ namespace Nekobox.AssetShortcuts
             folderPane.OnExpansionChanged += (isExpanded) =>
             {
                 this.isExpanded = isExpanded;
+                leftPane = isExpanded ? folderPane : narrowFolderPane;
             };
             narrowFolderPane.OnExpansionChanged += (isExpanded) =>
             {
                 this.isExpanded = isExpanded;
+                leftPane = isExpanded ? folderPane : narrowFolderPane;
             };
 
             Data.OnDataChanged += (_) => this.Repaint();
@@ -89,16 +96,8 @@ namespace Nekobox.AssetShortcuts
         {
             using (new EditorGUILayout.HorizontalScope())
             {
-                if (isExpanded)
-                {
-                    folderPane.Draw();
-                }
-                else
-                {
-                    narrowFolderPane.Draw();
-                }
-                
-                shortcutPane.Draw();
+                leftPane.Draw();
+                rightPane.Draw();
             }
 
             using (new EditorGUILayout.HorizontalScope(EditorStyles.toolbar))
