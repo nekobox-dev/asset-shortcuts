@@ -278,12 +278,12 @@ namespace Nekobox.AssetShortcuts
                     GUI.Label(iconRect, thumbnail);
                     GUI.Label(labelRect, label);
                 }
-                catch (MissingReferenceException e)
+                catch (MissingReferenceException)
                 {
                     GUI.Label(iconRect, EditorGUIUtility.TrIconContent("Error@2x"));
                     GUI.Label(labelRect, "Missing Asset");
                 }
-                catch (System.NullReferenceException e)
+                catch (System.NullReferenceException)
                 {
                     GUI.Label(iconRect, EditorGUIUtility.TrIconContent("Error@2x"));
                     GUI.Label(labelRect, "Null Reference");
