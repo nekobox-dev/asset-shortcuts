@@ -75,7 +75,7 @@ namespace Nekobox.AssetShortcuts
             };
             folderPane.OnExpansionChanged += expansionChanged;
             narrowFolderPane.OnExpansionChanged += expansionChanged;
-            
+
             Data.OnDataChanged += (_) => this.Repaint();
             Undo.willFlushUndoRecord += () => Data.NotifyChanges("UndoRedo");
         }
@@ -109,11 +109,18 @@ namespace Nekobox.AssetShortcuts
             switch (Event.current.type)
             {
                 case EventType.DragUpdated:
+                    if (selectedFolder == null) return;
+
+                    foreach (var obj in DragAndDrop.objectReferences)
+                    {
+                        if (!AssetDatabase.Contains(obj)) return;
+                    }
+
                     DragAndDrop.visualMode = DragAndDropVisualMode.Copy;
                     break;
 
                 case EventType.DragPerform:
-                    if (selectedFolder == null) break;
+                    if (selectedFolder == null) return;
 
                     DragAndDrop.AcceptDrag();
 
