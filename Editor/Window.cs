@@ -104,12 +104,12 @@ namespace Nekobox.AssetShortcuts
             using (new EditorGUILayout.HorizontalScope(EditorStyles.toolbar))
             {
                 EditorGUILayout.Space();
-                var mag = EditorGUILayout.Slider(Data.UISizeMag, 0.0f, 2.0f, GUILayout.Width(120));
+                var scale = EditorGUILayout.Slider(UI.Scale, 0.0f, 2.0f, GUILayout.Width(120));
                 
-                if (mag != Data.UISizeMag)
+                if (scale != UI.Scale)
                 {
-                    Data.UISizeMag = Mathf.Round(mag * 10) / 10;
-                    Data.NotifyChanges("UI size changed");
+                    UI.Scale = Mathf.Round(scale * 10) / 10;
+                    Data.NotifyChanges("UI scale changed");
                 }
             }
 

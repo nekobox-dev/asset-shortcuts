@@ -36,7 +36,7 @@ namespace Nekobox.AssetShortcuts
         public string Icon { get => icon; set => icon = value; }
     }
 
-    [FilePath(Defines.SAVE_PATH, FilePathAttribute.Location.ProjectFolder)]
+    [FilePath(Defines.SAVE_DATA_PATH, FilePathAttribute.Location.ProjectFolder)]
     public class Data : ScriptableSingleton<Data>
     {
         public static event System.Action<string> OnDataChanged;
@@ -48,19 +48,9 @@ namespace Nekobox.AssetShortcuts
 
         [SerializeField] private Folder root = null;
         [SerializeField] private int counter = 0;
-        [SerializeField] private float uiSizeMag = 1.0f;
         
         public static Folder Root { get => instance.root; set => instance.root = value; }
         public static int Counter { get => instance.counter; set => instance.counter = value; }
-        public static float UISizeMag { get => instance.uiSizeMag; set => instance.uiSizeMag = value; }
-
-        public static readonly float iconMinSize = 20;
-        public static readonly float iconMaxSize = 32;
-        public static float IconSize { get => iconMinSize + (iconMaxSize - iconMinSize) * instance.uiSizeMag; }
-
-        public static readonly float textMinSize = 10;
-        public static readonly float textMaxSize = 16;
-        public static float TextSize { get => textMinSize + (textMaxSize - textMinSize) * instance.uiSizeMag; }
 
         public void OnEnable()
         {

@@ -46,12 +46,12 @@ namespace Nekobox.AssetShortcuts
 
             reorderableList.elementHeightCallback = (_) => 
             {
-                return Mathf.Max(Data.IconSize, Data.TextSize);
+                return Mathf.Max(UI.IconSize, UI.TextSize);
             };
 
             reorderableList.drawElementCallback = (rect, index, isActive, isFocused) =>
             {
-                var (iconRect, labelRect) = Utils.GetRectListItem(rect);
+                var (iconRect, labelRect) = UI.GetRectListItem(rect);
                 var folder = Data.Root.Items[index] as Folder;
 
                 if (GUI.Button(iconRect, EditorGUIUtility.TrIconContent(folder.Icon)))
@@ -119,7 +119,7 @@ namespace Nekobox.AssetShortcuts
 
         public void Draw()
         {
-            using (var scrollView = new EditorGUILayout.ScrollViewScope(scrollPosition, GUILayout.Width(Data.IconSize + 150)))
+            using (var scrollView = new EditorGUILayout.ScrollViewScope(scrollPosition, GUILayout.Width(UI.IconSize + 150)))
             {
                 scrollPosition = scrollView.scrollPosition;
                 reorderableList?.DoLayoutList();
@@ -161,12 +161,12 @@ namespace Nekobox.AssetShortcuts
 
             reorderableList.elementHeightCallback = (_) => 
             {
-                return Mathf.Max(Data.IconSize, Data.TextSize);
+                return Mathf.Max(UI.IconSize, UI.TextSize);
             };
 
             reorderableList.drawElementCallback = (rect, index, isActive, isFocused) =>
             {
-                var (iconRect, labelRect) = Utils.GetRectListItem(rect);
+                var (iconRect, labelRect) = UI.GetRectListItem(rect);
                 var folder = Data.Root.Items[index] as Folder;
 
                 EditorGUI.LabelField(iconRect, EditorGUIUtility.TrIconContent(folder.Icon));
@@ -215,7 +215,7 @@ namespace Nekobox.AssetShortcuts
 
         public void Draw()
         {
-            using (var scrollView = new EditorGUILayout.ScrollViewScope(scrollPosition, GUILayout.Width(Data.IconSize + 12 + 16 + 8)))
+            using (var scrollView = new EditorGUILayout.ScrollViewScope(scrollPosition, GUILayout.Width(UI.IconSize + 12 + 16 + 8)))
             {
                 scrollPosition = scrollView.scrollPosition;
                 reorderableList?.DoLayoutList();
@@ -253,19 +253,19 @@ namespace Nekobox.AssetShortcuts
 
             reorderableList.drawHeaderCallback = (rect) =>
             {
-                var (iconRect, labelRect) = Utils.GetRectListItem(rect);
+                var (iconRect, labelRect) = UI.GetRectListItem(rect);
                 EditorGUI.LabelField(iconRect, EditorGUIUtility.TrIconContent(folder.Icon));
                 EditorGUI.LabelField(labelRect, folder.Label);
             };
 
             reorderableList.elementHeightCallback = (_) => 
             {
-                return Mathf.Max(Data.IconSize, Data.TextSize);
+                return Mathf.Max(UI.IconSize, UI.TextSize);
             };
             
             reorderableList.drawElementCallback = (rect, index, isActive, isFocused) =>
             {
-                var (iconRect, labelRect) = Utils.GetRectListItem(rect);
+                var (iconRect, labelRect) = UI.GetRectListItem(rect);
                 try
                 {
                     if (index < 0 || index >= folder.Items.Count) return;
