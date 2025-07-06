@@ -117,18 +117,18 @@ namespace Nekobox.AssetShortcuts
             switch (Event.current.type)
             {
                 case EventType.DragUpdated:
-                    if (selectedFolder == null) return;
+                    if (selectedFolder == null) break;
 
                     foreach (var obj in DragAndDrop.objectReferences)
                     {
-                        if (!AssetDatabase.Contains(obj)) return;
+                        if (!AssetDatabase.Contains(obj)) break;
                     }
 
                     DragAndDrop.visualMode = DragAndDropVisualMode.Copy;
                     break;
 
                 case EventType.DragPerform:
-                    if (selectedFolder == null) return;
+                    if (selectedFolder == null) break;
 
                     DragAndDrop.AcceptDrag();
 
