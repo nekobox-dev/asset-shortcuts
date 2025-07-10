@@ -2,6 +2,7 @@
 
 using System.Collections.Generic;
 using UnityEditor;
+using UnityEditorInternal;
 using UnityEngine;
 
 namespace Nekobox.AssetShortcuts
@@ -53,6 +54,130 @@ namespace Nekobox.AssetShortcuts
             var labelRect = new Rect(rect.x + size, rect.y, rect.width - size, rect.height);
 
             return (iconRect, labelRect);
+        }
+    }
+
+    public class UISettingsWindow : EditorWindow
+    {
+        [SerializeField] private Vector2 scrollPosition;
+        [SerializeField] private ReorderableList reorderableList;
+
+        //[MenuItem("Window/Asset Shortcuts/UI Settings")]
+        public static void Open()
+        {
+            var window = GetWindow<UISettingsWindow>();
+
+            window.titleContent = new GUIContent("Asset Shortcuts UI Settings");
+            window.Show();
+        }
+
+        private void OnEnable()
+        {
+            reorderableList = new ReorderableList(UI.Icons, typeof(string), true, true, true, true);
+            
+            reorderableList.drawHeaderCallback = (rect) =>
+            {
+                EditorGUI.LabelField(rect, "Icons", EditorStyles.boldLabel);
+            };
+
+            reorderableList.drawElementCallback = (rect, index, isActive, isFocused) =>
+            {
+                if (index < 0 || index >= UI.Icons.Count) return;
+
+                var (iconRect, labelRect) = UI.GetRectListItem(rect, true);
+
+                var icon = UI.Icons[index];
+                var iconContent = EditorGUIUtility.TrIconContent(icon);
+                EditorGUI.LabelField(iconRect, iconContent);
+                
+                var edited = EditorGUI.DelayedTextField(labelRect, icon);
+
+                if (string.IsNullOrEmpty(edited))
+                {
+                    edited = UI.Icons[index];
+                }
+
+                if (icon != edited)
+                {
+                    Undo.RecordObject(UI.instance, Defines.LOG_PREFIX + "Icon Changed");
+                    UI.Icons[index] = edited;
+                    UI.NotifyChanges("Icon list changed");
+                }
+            };
+
+            reorderableList.onChangedCallback = (list) =>
+            {
+                Undo.RecordObject(UI.instance, Defines.LOG_PREFIX + "Icons Changed");
+                UI.NotifyChanges("Icons list changed");
+            };
+
+            //reorderableList.onReorderCallback = (list) =>
+            //{
+            //    Undo.RecordObject(UI.instance, Defines.LOG_PREFIX + "Icons Reordered");
+            //    UI.NotifyChanges("Icons reordered");
+            //};
+        }
+
+        private void OnGUI()
+        {
+            using (var scroll = new EditorGUILayout.ScrollViewScope(scrollPosition))
+            {
+                scrollPosition = scroll.scrollPosition;
+
+                reorderableList?.DoLayoutList();
+                if (GUILayout.Button("Preview Icons"))
+                {
+                    var popupRect = new Rect(Event.current.mousePosition, Vector2.one);
+                    var content = new PopupIconSelector();
+                    PopupWindow.Show(popupRect, content);
+                }
+
+                EditorGUILayout.Space(10);
+
+                using (var check = new EditorGUI.ChangeCheckScope())
+                {
+                    EditorGUILayout.LabelField("Icon Size", EditorStyles.boldLabel);
+                    var iconSizeMin = UI.IconSizeMin = EditorGUILayout.FloatField("Icon Size Min", UI.IconSizeMin);
+                    var iconSizeMax = UI.IconSizeMax = EditorGUILayout.FloatField("Icon Size Max", UI.IconSizeMax);
+
+                    EditorGUILayout.Space(10);
+
+                    //EditorGUILayout.LabelField("Text Size (Unimplemented)");
+                    //EditorGUI.BeginDisabledGroup(true);
+                    //var textSizeMin = EditorGUILayout.FloatField("Text Size Min", UI.TextSizeMin);
+                    //var textSizeMax = EditorGUILayout.FloatField("Text Size Max", UI.TextSizeMax);
+                    //EditorGUI.EndDisabledGroup();
+
+                    if (check.changed)
+                    {
+                        Undo.RecordObject(UI.instance, Defines.LOG_PREFIX + "UI Settings Changed");
+
+                        UI.IconSizeMin = Mathf.Max(0, iconSizeMin);
+                        UI.IconSizeMax = Mathf.Max(UI.IconSizeMin, iconSizeMax);
+                        //UI.TextSizeMin = Mathf.Max(0, textSizeMin);
+                        //UI.TextSizeMax = Mathf.Max(UI.TextSizeMin, textSizeMax);
+
+                        UI.NotifyChanges("UI settings changed");
+                    }
+                }
+
+                EditorGUILayout.Space(10);
+
+                if (GUILayout.Button("Reset"))
+                {
+                    Undo.RecordObject(UI.instance, Defines.LOG_PREFIX + "UI Settings Reset");
+
+                    UI.Icons.Clear();
+                    UI.Icons.AddRange(Defines.DEFAULT_ICONS);
+                    UI.Scale = 1.0f;
+                    UI.IconSizeMin = 20;
+                    UI.IconSizeMax = 32;
+                    UI.TextSizeMin = 10;
+                    UI.TextSizeMax = 16;
+
+                    UI.NotifyChanges("UI settings reset to defaults");
+                }
+            }
         }
     }
 }

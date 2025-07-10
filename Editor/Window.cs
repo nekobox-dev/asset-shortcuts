@@ -8,7 +8,7 @@ using UnityEngine;
 namespace Nekobox.AssetShortcuts
 {
     [System.Serializable]
-    public class Window : EditorWindow
+    public class Window : EditorWindow, IHasCustomMenu
     {
         [SerializeField] private FolderPane folderPane;
         [SerializeField] private NarrowFolderPane narrowFolderPane;
@@ -142,6 +142,11 @@ namespace Nekobox.AssetShortcuts
                     }
                     break;
             }
+        }
+
+        public void AddItemsToMenu(GenericMenu menu)
+        {
+            menu.AddItem(new GUIContent("UI Settings"), false, () => UISettingsWindow.Open());
         }
     }
 }

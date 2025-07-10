@@ -18,7 +18,7 @@ namespace Nekobox.AssetShortcuts
         public static readonly float Margin = 4;
         
         public static readonly int Column = 8;
-        public static readonly int Row = (UI.Icons.Count - 1) / Column + 1;
+        public static int Row { get => (UI.Icons.Count - 1) / Column + 1; }
 
         public static float Width { get => Column * (IconSize + Gap * 2) + Margin; }
         public static float Height { get => Row * (IconSize + Gap * 2) + Margin; }
