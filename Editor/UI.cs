@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Nekobox.AssetShortcuts
 {
-    [FilePath(Defines.SAVE_UI_PATH, FilePathAttribute.Location.ProjectFolder)]
+    [FilePath(Defines.SAVE_FOLDER_PATH + "UI.dat", FilePathAttribute.Location.ProjectFolder)]
     public class UI : ScriptableSingleton<UI>
     {
         [SerializeField] private List<string> icons = new List<string>(Defines.DEFAULT_ICONS);

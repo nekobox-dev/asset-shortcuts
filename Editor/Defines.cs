@@ -8,8 +8,6 @@ namespace Nekobox.AssetShortcuts
         public const string PACKAGE_NAME = "Asset Shortcuts";
         public const string MENU_PATH = "Tools/" + PACKAGE_NAME;
         public const string SAVE_FOLDER_PATH = PACKAGE_PATH + "Editor/SaveData/";
-        public const string SAVE_DATA_PATH = SAVE_FOLDER_PATH + "Data.dat";
-        public const string SAVE_UI_PATH = SAVE_FOLDER_PATH + "UI.dat";
         public const string LOG_PREFIX = "["+ PACKAGE_NAME +"]: ";
 
         public static readonly string[] DEFAULT_ICONS = 
