@@ -152,10 +152,10 @@ namespace Nekobox.AssetShortcuts
                     {
                         Undo.RecordObject(UI.instance, Defines.LOG_PREFIX + "UI Settings Changed");
 
-                        UI.IconSizeMin = Mathf.Max(0, iconSizeMin);
-                        UI.IconSizeMax = Mathf.Max(UI.IconSizeMin, iconSizeMax);
-                        //UI.TextSizeMin = Mathf.Max(0, textSizeMin);
-                        //UI.TextSizeMax = Mathf.Max(UI.TextSizeMin, textSizeMax);
+                        UI.IconSizeMin = Mathf.Max(0, Mathf.Round(iconSizeMin * 10) / 10);
+                        UI.IconSizeMax = Mathf.Max(UI.IconSizeMin, Mathf.Round(iconSizeMax * 10) / 10);
+                        //UI.TextSizeMin = Mathf.Max(0, Mathf.Round(textSizeMin * 10) / 10);
+                        //UI.TextSizeMax = Mathf.Max(UI.TextSizeMin, Mathf.Round(textSizeMax * 10) / 10);
 
                         UI.NotifyChanges("UI settings changed");
                     }
