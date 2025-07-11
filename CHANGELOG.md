@@ -1,6 +1,11 @@
 Asset Shortcuts
 ===
 
+v0.2.2 - 2025/07/11
+---
+- Fix round icon size values to one decimal place in UI Settings Window
+- Refactor comment out Import.cs
+
 v0.2.1 - 2025/07/10
 ---
 - Add UI settings window and integrate menu option in main window
