@@ -7,6 +7,7 @@ using UnityEngine;
 
 namespace Nekobox.AssetShortcuts
 {
+    /*
     [FilePath(Defines.SAVE_FOLDER_PATH + "Import.dat", FilePathAttribute.Location.ProjectFolder)]
     public class ImportSettings : ScriptableSingleton<ImportSettings>
     {
@@ -43,6 +44,7 @@ namespace Nekobox.AssetShortcuts
 
         }
     }
+    */
 }
 
 #endif // UNITY_EDITOR
