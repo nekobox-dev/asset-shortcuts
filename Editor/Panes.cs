@@ -289,7 +289,7 @@ namespace Nekobox.AssetShortcuts
                     
                     var shortcut = folder.Items[index] as Shortcut;
 
-                    var thumbnail = AssetPreview.GetMiniThumbnail(shortcut.Asset);
+                    var thumbnail = AssetPreview.GetAssetPreview(shortcut.Asset);
                     var label = string.IsNullOrEmpty(shortcut.Label) ? shortcut.Asset.name : shortcut.Label;
 
                     GUI.Label(iconRect, thumbnail);
