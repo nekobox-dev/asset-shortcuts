@@ -251,11 +251,28 @@ namespace Nekobox.AssetShortcuts
 
             reorderableList = new ReorderableList(folder.Items, typeof(Shortcut), draggable, true, true, true);
 
+            UI.OnDataChanged += (_) =>
+            {
+                reorderableList.draggable = !UI.IsLocked;
+            };
+
             reorderableList.drawHeaderCallback = (rect) =>
             {
                 var (iconRect, labelRect) = UI.GetRectListItem(rect);
+
+                var lockRect = new Rect(rect.x + rect.width - rect.height, rect.y, rect.height, rect.height);
+                labelRect.width -= rect.height;
+                
                 EditorGUI.LabelField(iconRect, EditorGUIUtility.TrIconContent(folder.Icon));
                 EditorGUI.LabelField(labelRect, folder.Label);
+
+                if (GUI.Button(lockRect, EditorGUIUtility.TrIconContent(UI.IsLocked ? "LockIcon-On" : "LockIcon"), EditorStyles.toolbarButton))
+                {
+                    UI.IsLocked = !UI.IsLocked;
+
+                    Undo.RecordObject(UI.instance, Defines.LOG_PREFIX + "UI Lock State Changed");
+                    UI.NotifyChanges("UI Lock State Changed");
+                }
             };
 
             reorderableList.elementHeightCallback = (_) => 

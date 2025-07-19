@@ -16,6 +16,7 @@ namespace Nekobox.AssetShortcuts
         [SerializeField] private float iconSizeMax = 32;
         [SerializeField] private float textSizeMin = 10;
         [SerializeField] private float textSizeMax = 16;
+        [SerializeField] private bool isLocked = false;
         
         public static event System.Action<string> OnDataChanged;
         public static void NotifyChanges(string name)
@@ -32,6 +33,8 @@ namespace Nekobox.AssetShortcuts
 
         public static float IconSize { get => IconSizeMin + (IconSizeMax - IconSizeMin) * Scale; }
         public static float TextSize { get => TextSizeMin + (TextSizeMax - TextSizeMin) * Scale; }
+
+        public static bool IsLocked { get => instance.isLocked; set => instance.isLocked = value; }
 
         public void OnEnable()
         {
@@ -174,6 +177,7 @@ namespace Nekobox.AssetShortcuts
                     UI.IconSizeMax = 32;
                     UI.TextSizeMin = 10;
                     UI.TextSizeMax = 16;
+                    UI.IsLocked = false;
 
                     UI.NotifyChanges("UI settings reset to defaults");
                 }
