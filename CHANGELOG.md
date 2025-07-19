@@ -1,6 +1,10 @@
 Asset Shortcuts
 ===
 
+v1.0.2 - 2025/07/19
+---
+- Fix show thumbnails for assets that cannot be previewed
+
 v1.0.1 - 2025/07/19
 ---
 - Add lock to reorderable-list in ShortcutPane
