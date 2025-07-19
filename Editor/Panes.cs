@@ -249,7 +249,7 @@ namespace Nekobox.AssetShortcuts
                 folder.Items = new List<IListItem>();
             }
 
-            reorderableList = new ReorderableList(folder.Items, typeof(Shortcut), draggable, true, true, true);
+            reorderableList = new ReorderableList(folder.Items, typeof(Shortcut), UI.IsLocked ? false : draggable, true, true, true);
 
             UI.OnDataChanged += (_) =>
             {
