@@ -119,10 +119,10 @@ namespace Nekobox.AssetShortcuts
                 case EventType.DragUpdated:
                     if (selectedFolder == null) break;
 
-                    foreach (var obj in DragAndDrop.objectReferences)
-                    {
-                        if (!AssetDatabase.Contains(obj)) break;
-                    }
+                    //foreach (var obj in DragAndDrop.objectReferences)
+                    //{
+                    //    if (!AssetDatabase.Contains(obj)) break;
+                    //}
 
                     DragAndDrop.visualMode = DragAndDropVisualMode.Copy;
                     break;
