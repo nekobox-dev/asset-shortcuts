@@ -294,6 +294,28 @@ namespace Nekobox.AssetShortcuts
 
                     GUI.Label(iconRect, thumbnail);
                     GUI.Label(labelRect, label);
+                    
+                    if (!UI.IsLocked) return;
+
+                    switch (Event.current.type)
+                    {
+                        case EventType.MouseDown:
+                            if (!iconRect.Contains(Event.current.mousePosition)) break;
+
+                            DragAndDrop.PrepareStartDrag();
+                            DragAndDrop.objectReferences = new UnityEngine.Object[] { shortcut.Asset };
+                            DragAndDrop.SetGenericData("SourceWindow", EditorWindow.mouseOverWindow.GetInstanceID());
+                            DragAndDrop.StartDrag(Defines.LOG_PREFIX + "Dragging Start: " + label);
+                            Event.current.Use();
+                            break;
+                        
+                        case EventType.DragUpdated:
+                            if (DragAndDrop.objectReferences.Length > 0)
+                            {
+                                DragAndDrop.visualMode = DragAndDropVisualMode.Copy;
+                            }
+                            break;
+                    }
                 }
                 catch (MissingReferenceException)
                 {

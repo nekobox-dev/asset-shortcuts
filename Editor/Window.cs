@@ -118,17 +118,27 @@ namespace Nekobox.AssetShortcuts
             {
                 case EventType.DragUpdated:
                     if (selectedFolder == null) break;
-
-                    //foreach (var obj in DragAndDrop.objectReferences)
-                    //{
-                    //    if (!AssetDatabase.Contains(obj)) break;
-                    //}
+                    if (DragAndDrop.objectReferences.Length == 0) break;
 
                     DragAndDrop.visualMode = DragAndDropVisualMode.Copy;
                     break;
 
                 case EventType.DragPerform:
                     if (selectedFolder == null) break;
+                    if (DragAndDrop.objectReferences.Length == 0) break;
+
+                    var targetWindowId = this.GetInstanceID();
+
+                    object generic = DragAndDrop.GetGenericData("SourceWindow");
+                    if (generic is int sourceWindowId)
+                    {
+                        if (sourceWindowId == targetWindowId)
+                        {
+                            DragAndDrop.visualMode = DragAndDropVisualMode.None;
+                            Event.current.Use();
+                            break;
+                        }
+                    }
 
                     DragAndDrop.AcceptDrag();
 
