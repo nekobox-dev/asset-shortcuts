@@ -1,6 +1,13 @@
 Asset Shortcuts
 ===
 
+v1.0.1 - 2025/07/19
+---
+- Add lock to reorderable-list in ShortcutPane
+- Add DragAndDrop objects out of the window while locked
+- Add preview display in ShortcutPane
+- Refactor DragUpdate performance improvement
+
 v1.0.0 - 2025/07/11
 ---
 - Update to official release version
