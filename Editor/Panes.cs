@@ -318,7 +318,7 @@ namespace Nekobox.AssetShortcuts
                             break;
                     }
                 }
-                catch (MissingReferenceException)
+                catch (UnityEngine.MissingReferenceException)
                 {
                     GUI.Label(iconRect, EditorGUIUtility.TrIconContent("Error@2x"));
                     GUI.Label(labelRect, "Missing Asset");
