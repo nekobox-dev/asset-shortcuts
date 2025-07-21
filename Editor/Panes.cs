@@ -285,7 +285,7 @@ namespace Nekobox.AssetShortcuts
                 var (iconRect, labelRect) = UI.GetRectListItem(rect);
                 try
                 {
-                    if (index < 0 || index >= folder.Items.Count) return;
+                    //if (index < 0 || index >= folder.Items.Count) return;
                     
                     var shortcut = folder.Items[index] as Shortcut;
 
@@ -327,6 +327,11 @@ namespace Nekobox.AssetShortcuts
                 {
                     GUI.Label(iconRect, EditorGUIUtility.TrIconContent("Error@2x"));
                     GUI.Label(labelRect, "Null Reference");
+                }
+                catch (System.IndexOutOfRangeException)
+                {
+                    GUI.Label(iconRect, EditorGUIUtility.TrIconContent("Error@2x"));
+                    GUI.Label(labelRect, "Index Out of Range");
                 }
             };
 
