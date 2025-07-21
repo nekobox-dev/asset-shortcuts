@@ -301,7 +301,7 @@ namespace Nekobox.AssetShortcuts
                     switch (Event.current.type)
                     {
                         case EventType.MouseDown:
-                            if (!iconRect.Contains(Event.current.mousePosition)) break;
+                            if (!rect.Contains(Event.current.mousePosition)) break;
 
                             DragAndDrop.PrepareStartDrag();
                             DragAndDrop.objectReferences = new UnityEngine.Object[] { shortcut.Asset };
