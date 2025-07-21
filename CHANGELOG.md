@@ -1,6 +1,12 @@
 Asset Shortcuts
 ===
 
+v1.0.3 - 2025/07/21
+---
+- Fix drag & drop judging only on icons
+- Fix proberly detect changes in UI Scale
+- Refactor exception handling in ShortcutPane
+
 v1.0.2 - 2025/07/19
 ---
 - Fix show thumbnails for assets that cannot be previewed
