@@ -111,7 +111,7 @@ namespace Nekobox.AssetShortcuts
                 if (UI.Scale != scale)
                 {
                     UI.Scale = scale;
-                    Data.NotifyChanges("UI scale changed");
+                    UI.NotifyChanges("UI scale changed");
                 }
             }
 
