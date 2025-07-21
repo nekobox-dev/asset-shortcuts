@@ -106,10 +106,11 @@ namespace Nekobox.AssetShortcuts
             {
                 EditorGUILayout.Space();
                 var scale = EditorGUILayout.Slider(UI.Scale, 0.0f, 2.0f, GUILayout.Width(120));
+                scale = Mathf.Round(scale * 10) / 10;
                 
-                if (scale != UI.Scale)
+                if (UI.Scale != scale)
                 {
-                    UI.Scale = Mathf.Round(scale * 10) / 10;
+                    UI.Scale = scale;
                     Data.NotifyChanges("UI scale changed");
                 }
             }
