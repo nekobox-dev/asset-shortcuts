@@ -36,7 +36,7 @@ namespace Nekobox.AssetShortcuts
         public string Icon { get => icon; set => icon = value; }
     }
 
-    [FilePath(Defines.SAVE_FOLDER_PATH + "Data.bat", FilePathAttribute.Location.ProjectFolder)]
+    [FilePath(Defines.SAVE_FOLDER_PATH + "Data.dat", FilePathAttribute.Location.ProjectFolder)]
     public class Data : ScriptableSingleton<Data>
     {
         public static event System.Action<string> OnDataChanged;
