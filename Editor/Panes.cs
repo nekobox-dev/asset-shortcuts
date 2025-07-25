@@ -307,7 +307,7 @@ namespace Nekobox.AssetShortcuts
                             DragAndDrop.objectReferences = new UnityEngine.Object[] { shortcut.Asset };
                             DragAndDrop.SetGenericData("SourceWindow", EditorWindow.mouseOverWindow.GetInstanceID());
                             DragAndDrop.StartDrag(Defines.LOG_PREFIX + "Dragging Start: " + label);
-                            Event.current.Use();
+                            //Event.current.Use();
                             break;
                         
                         case EventType.DragUpdated:
