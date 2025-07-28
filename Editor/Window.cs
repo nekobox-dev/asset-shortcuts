@@ -152,22 +152,6 @@ namespace Nekobox.AssetShortcuts
                         Data.NotifyChanges("Shortcut added");
                     }
                     break;
-                
-                //case EventType.MouseDown:
-                //    //if (!UI.IsLocked) break;
-                //    //if (!rightPane.GetRect().Contains(Event.current.mousePosition)) break;
-                //    DragAndDrop.PrepareStartDrag();
-                //    var assets = new UnityEngine.Object[selectedShortcuts.Length];
-                //    for (int i = 0; i < selectedShortcuts.Length; i++)
-                //    {
-                //        assets[i] = selectedShortcuts[i].Asset;
-                //    }
-                //    Debug.Log(assets.Length + " assets selected for drag.");
-                //    DragAndDrop.objectReferences = assets;
-                //    DragAndDrop.SetGenericData("SourceWindow", EditorWindow.mouseOverWindow.GetInstanceID());
-                //    DragAndDrop.StartDrag(Defines.LOG_PREFIX + "Dragging Start");
-                //    Event.current.Use();
-                //    break;
             }
         }
 
