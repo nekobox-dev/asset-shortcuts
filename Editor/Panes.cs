@@ -360,7 +360,8 @@ namespace Nekobox.AssetShortcuts
                 var assets = GetShortcutAssets(shortcuts);
                 
                 NotifyShortcutsSelected(shortcuts);
-                Utils.PingAndSelectionObjects(assets);
+                EditorGUIUtility.PingObject(assets[0]);
+                Selection.objects = assets;
             };
 
             reorderableList.onAddCallback = (reorderableList) =>
