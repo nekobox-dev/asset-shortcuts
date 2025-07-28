@@ -413,7 +413,7 @@ namespace Nekobox.AssetShortcuts
 
                 return shortcuts;
             }
-            catch (System.Exception e)
+            catch (System.Exception)
             {
                 return null;
             }
@@ -430,7 +430,7 @@ namespace Nekobox.AssetShortcuts
                 }
                 return assets;
             }
-            catch (System.Exception e)
+            catch (System.Exception)
             {
                 return null;
             }
