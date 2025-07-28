@@ -168,6 +168,17 @@ namespace Nekobox.AssetShortcuts
             UI.NotifyChanges("UI lock toggled");
             EditorWindow.focusedWindow?.Repaint();
         }
+
+        [Shortcut("Toggle Expansion / Local", typeof(Window), KeyCode.E, ShortcutModifiers.Action)]
+        public static void ToggleExpansion()
+        {
+            var window = EditorWindow.focusedWindow as Window;
+            if (window == null) return;
+
+            window.isExpanded = !window.isExpanded;
+            window.leftPane = window.isExpanded ? window.folderPane : window.narrowFolderPane;
+            window.Repaint();
+        }
     }
 }
 
