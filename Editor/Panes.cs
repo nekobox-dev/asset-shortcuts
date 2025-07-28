@@ -337,21 +337,10 @@ namespace Nekobox.AssetShortcuts
                     case EventType.MouseDown:
                         if (!UI.IsLocked) break;
                         if (!rect.Contains(Event.current.mousePosition)) break;
-                        
+
                         DragAndDrop.PrepareStartDrag();
-                        var selectedShortcuts = reorderableList.selectedIndices
-                            .Select(i => folder.Items[i] as Shortcut)
-                            .Where(s => s != null && s.Asset != null)
-                            .ToArray();
-                        if (selectedShortcuts.Length == 0)
-                        {
-                            selectedShortcuts = new Shortcut[] { folder.Items[index] as Shortcut };
-                        }
-                        var assets = new UnityEngine.Object[selectedShortcuts.Length];
-                        for (int i = 0; i < selectedShortcuts.Length; i++)
-                        {
-                            assets[i] = selectedShortcuts[i].Asset;
-                        }
+                        var shortcuts = GetSelectedShortcuts();
+                        var assets = GetShortcutAssets(shortcuts);
                         DragAndDrop.objectReferences = assets;
                         DragAndDrop.SetGenericData("SourceWindow", EditorWindow.mouseOverWindow.GetInstanceID());
                         DragAndDrop.StartDrag(Defines.LOG_PREFIX + "Dragging Start");
@@ -367,21 +356,8 @@ namespace Nekobox.AssetShortcuts
                 //var shortcut = folder.Items[reorderableList.index] as Shortcut;
                 //if (shortcut == null || shortcut.Asset == null) return;
                 
-                var shortcuts = reorderableList.selectedIndices
-                    .Select(i => folder.Items[i] as Shortcut)
-                    .Where(s => s != null && s.Asset != null)
-                    .ToArray();
-                
-                if (shortcuts.Length == 0)
-                {
-                    shortcuts = new Shortcut[] { folder.Items[reorderableList.index] as Shortcut };
-                }
-
-                var assets = new Object[shortcuts.Length];
-                for (int i = 0; i < shortcuts.Length; i++)
-                {
-                    assets[i] = shortcuts[i].Asset;
-                }
+                var shortcuts = GetSelectedShortcuts();
+                var assets = GetShortcutAssets(shortcuts);
                 
                 NotifyShortcutsSelected(shortcuts);
                 Utils.PingAndSelectionObjects(assets);
@@ -433,6 +409,45 @@ namespace Nekobox.AssetShortcuts
         public Rect GetRect()
         {
             return rect;
+        }
+
+        public Shortcut[] GetSelectedShortcuts()
+        {
+            var shortcuts = reorderableList.selectedIndices
+                .Select(i => reorderableList.list[i] as Shortcut)
+                .Where(s => s != null && s.Asset != null)
+                .ToArray();
+            
+            if (shortcuts.Length == 0)
+            {
+                shortcuts = new Shortcut[] { reorderableList.list[reorderableList.index] as Shortcut };
+            }
+
+            return shortcuts;
+        }
+
+        public Object[] GetShortcutAssets(Shortcut[] shortcuts)
+        {
+            var assets = new Object[shortcuts.Length];
+            for (int i = 0; i < shortcuts.Length; i++)
+            {
+                assets[i] = shortcuts[i].Asset;
+            }
+            return assets;
+        }
+
+        public void SelectAll()
+        {
+            if (reorderableList == null) return;
+
+            reorderableList.SelectRange(0, reorderableList.count - 1);
+
+            var shortcuts = GetSelectedShortcuts();
+            var assets = GetShortcutAssets(shortcuts);
+            
+            NotifyShortcutsSelected(shortcuts);
+            Utils.PingAndSelectionObjects(assets);
+
         }
     }
 }

@@ -179,6 +179,16 @@ namespace Nekobox.AssetShortcuts
             window.leftPane = window.isExpanded ? window.folderPane : window.narrowFolderPane;
             window.Repaint();
         }
+
+        [Shortcut("Select All Shortcuts / Local", typeof(Window), KeyCode.A, ShortcutModifiers.Action)]
+        public static void SelectAllShortcuts()
+        {
+            var window = EditorWindow.focusedWindow as Window;
+            if (window == null) return;
+            if (window.shortcutPane == null) return;
+            window.shortcutPane.SelectAll();
+            window.Repaint();
+        }
     }
 }
 
