@@ -358,6 +358,8 @@ namespace Nekobox.AssetShortcuts
                 
                 var shortcuts = GetSelectedShortcuts();
                 var assets = GetShortcutAssets(shortcuts);
+
+                if (shortcuts == null || assets == null) return;
                 
                 NotifyShortcutsSelected(shortcuts);
                 EditorGUIUtility.PingObject(assets[0]);
@@ -414,27 +416,37 @@ namespace Nekobox.AssetShortcuts
 
         public Shortcut[] GetSelectedShortcuts()
         {
-            var shortcuts = reorderableList.selectedIndices
-                .Select(i => reorderableList.list[i] as Shortcut)
-                .Where(s => s != null && s.Asset != null)
-                .ToArray();
-            
-            if (shortcuts.Length == 0)
+            try
             {
-                shortcuts = new Shortcut[] { reorderableList.list[reorderableList.index] as Shortcut };
-            }
+                var shortcuts = reorderableList.selectedIndices.Count == 0 ? new Shortcut[] { reorderableList.list[reorderableList.index] as Shortcut } :
+                    reorderableList.selectedIndices
+                    .Select(i => reorderableList.list[i] as Shortcut)
+                    .Where(s => s != null && s.Asset != null)
+                    .ToArray();
 
-            return shortcuts;
+                return shortcuts;
+            }
+            catch (System.Exception e)
+            {
+                return null;
+            }
         }
 
         public Object[] GetShortcutAssets(Shortcut[] shortcuts)
         {
-            var assets = new Object[shortcuts.Length];
-            for (int i = 0; i < shortcuts.Length; i++)
+            try
             {
-                assets[i] = shortcuts[i].Asset;
+                var assets = new Object[shortcuts.Length];
+                for (int i = 0; i < shortcuts.Length; i++)
+                {
+                    assets[i] = shortcuts[i].Asset;
+                }
+                return assets;
             }
-            return assets;
+            catch (System.Exception e)
+            {
+                return null;
+            }
         }
 
         public void SelectAll()
@@ -445,6 +457,8 @@ namespace Nekobox.AssetShortcuts
 
             var shortcuts = GetSelectedShortcuts();
             var assets = GetShortcutAssets(shortcuts);
+
+            if (shortcuts == null || assets == null) return;
             
             NotifyShortcutsSelected(shortcuts);
             Selection.objects = assets;
