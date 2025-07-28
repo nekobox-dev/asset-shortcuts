@@ -2,6 +2,7 @@
 
 using System.Collections.Generic;
 using UnityEditor;
+using UnityEditor.ShortcutManagement;
 using UnityEditorInternal;
 using UnityEngine;
 
@@ -158,6 +159,14 @@ namespace Nekobox.AssetShortcuts
         public void AddItemsToMenu(GenericMenu menu)
         {
             menu.AddItem(new GUIContent("UI Settings"), false, () => UISettingsWindow.Open());
+        }
+
+        [Shortcut("Toggle Lock UI / Local", typeof(Window), KeyCode.T, ShortcutModifiers.Action)]
+        public static void ToggleLockUI()
+        {
+            UI.IsLocked = !UI.IsLocked;
+            UI.NotifyChanges("UI lock toggled");
+            EditorWindow.focusedWindow?.Repaint();
         }
     }
 }
