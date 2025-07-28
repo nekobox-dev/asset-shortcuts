@@ -359,11 +359,18 @@ namespace Nekobox.AssetShortcuts
                 var shortcuts = GetSelectedShortcuts();
                 var assets = GetShortcutAssets(shortcuts);
 
-                if (shortcuts == null || assets == null) return;
-                
-                NotifyShortcutsSelected(shortcuts);
-                EditorGUIUtility.PingObject(assets[0]);
-                Selection.objects = assets;
+                if (UI.IsLocked) return;
+
+                if (shortcuts != null)
+                {
+                    NotifyShortcutsSelected(shortcuts);
+                }
+
+                if (assets != null)
+                {
+                    EditorGUIUtility.PingObject(assets[0]);
+                    Selection.objects = assets;
+                }
             };
 
             reorderableList.onAddCallback = (reorderableList) =>
