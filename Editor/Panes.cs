@@ -446,8 +446,7 @@ namespace Nekobox.AssetShortcuts
             var assets = GetShortcutAssets(shortcuts);
             
             NotifyShortcutsSelected(shortcuts);
-            Utils.PingAndSelectionObjects(assets);
-
+            Selection.objects = assets;
         }
     }
 }
