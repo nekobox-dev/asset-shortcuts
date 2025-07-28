@@ -373,32 +373,12 @@ namespace Nekobox.AssetShortcuts
                 }
             };
 
-            reorderableList.onAddCallback = (reorderableList) =>
-            {
-                var shortcut = new Shortcut();
-                shortcut.Label = "";
-                shortcut.Icon = "";
-                shortcut.Asset = Selection.activeObject;
-
-                Undo.RecordObject(Data.instance, Defines.LOG_PREFIX + "Add Shortcut");
-                folder.Items.Add(shortcut);
-                Data.NotifyChanges("Shortcut added");
-            };
-
-            reorderableList.onRemoveCallback = (reorderableList) =>
-            {
-                if (reorderableList.index < 0 || folder.Items.Count <= reorderableList.index) return;
-
-                Undo.RecordObject(Data.instance, Defines.LOG_PREFIX + "Remove Shortcut");
-                folder.Items.RemoveAt(reorderableList.index);
-                Data.NotifyChanges("Shortcut removed");
-            };
-
+            reorderableList.onAddCallback = (_) => Add();
+            reorderableList.onRemoveCallback = (_) => Remove();
             reorderableList.onReorderCallback = (list) =>
             {
                 Data.NotifyChanges("Shortcut reordered");
             };
-
             reorderableList.onCanAddCallback = (list) =>
             {
                 return Selection.activeObject != null;
@@ -453,6 +433,67 @@ namespace Nekobox.AssetShortcuts
             catch (System.Exception e)
             {
                 return null;
+            }
+        }
+
+        public void Add()
+        {
+            try
+            {
+                if (Selection.objects == null || Selection.objects.Length == 0) return;
+
+                Undo.RecordObject(Data.instance, Defines.LOG_PREFIX + "Add Shortcut");
+                foreach (var obj in Selection.objects)
+                {
+                    var shortcut = new Shortcut();
+                    shortcut.Label = "";
+                    shortcut.Icon = "";
+                    shortcut.Asset = obj;
+                    
+                    reorderableList.list.Add(shortcut);
+                }
+                Data.NotifyChanges("Shortcut added");
+            }
+            catch (System.Exception)
+            {
+                return;
+            }
+        }
+
+        public void Remove()
+        {
+            try
+            {
+                Undo.RecordObject(Data.instance, Defines.LOG_PREFIX + "Remove Shortcut");
+                int[] deleteIndexes = reorderableList.selectedIndices.Count > 0 ? reorderableList.selectedIndices.Reverse<int>().ToArray() : new[] { reorderableList.index };
+                int lastdeletedIndex = -1;
+                foreach (var index in deleteIndexes)
+                {
+                    if (index >= reorderableList.count) continue;
+
+                    reorderableList.list.RemoveAt(index);
+                    lastdeletedIndex = index;
+                }
+                Data.NotifyChanges("Shortcut removed");
+            }
+            catch (System.Exception)
+            {
+                return;
+            }
+        }
+        
+        public void Select(int index)
+        {
+            try
+            {
+                //if (reorderableList == null) return;
+                //if (index < 0 || index >= reorderableList.count) return;
+
+                reorderableList.index = index;
+            }
+            catch (System.Exception)
+            {
+                return;
             }
         }
 
