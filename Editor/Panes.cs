@@ -439,7 +439,7 @@ namespace Nekobox.AssetShortcuts
 
         public void SelectAll()
         {
-            if (reorderableList == null) return;
+            if (reorderableList == null || reorderableList.count == 0) return;
 
             reorderableList.SelectRange(0, reorderableList.count - 1);
 
