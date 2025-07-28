@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
 
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
@@ -10,11 +11,13 @@ namespace Nekobox.AssetShortcuts
     public interface IPane
     {
         public void Draw();
+        public Rect GetRect();
     }
 
     [System.Serializable]
     public class FolderPane : IPane
     {
+        [SerializeField] private Rect rect;
         [SerializeField] private Vector2 scrollPosition;
         [SerializeField] private ReorderableList reorderableList;
         
@@ -124,12 +127,20 @@ namespace Nekobox.AssetShortcuts
                 scrollPosition = scrollView.scrollPosition;
                 reorderableList?.DoLayoutList();
             }
+
+            rect = GUILayoutUtility.GetLastRect();
+        }
+
+        public Rect GetRect()
+        {
+            return rect;
         }
     }
 
     [System.Serializable]
     public class NarrowFolderPane : IPane
     {
+        [SerializeField] private Rect rect;
         [SerializeField] private Vector2 scrollPosition;
         [SerializeField] private ReorderableList reorderableList;
 
@@ -220,19 +231,27 @@ namespace Nekobox.AssetShortcuts
                 scrollPosition = scrollView.scrollPosition;
                 reorderableList?.DoLayoutList();
             }
+
+            rect = GUILayoutUtility.GetLastRect();
+        }
+
+        public Rect GetRect()
+        {
+            return rect;
         }
     }
 
     [System.Serializable]
     public class ShortcutPane : IPane
     {
+        [SerializeField] private Rect rect;
         [SerializeField] private Vector2 scrollPosition;
         [SerializeField] private ReorderableList reorderableList;
         
-        public event System.Action<Shortcut> OnShortcutSelected;
-        public void ShortcutSelected(Shortcut shortcut)
+        public event System.Action<Shortcut[]> OnShortcutsSelected;
+        public void NotifyShortcutsSelected(Shortcut[] shortcuts)
         {
-            OnShortcutSelected?.Invoke(shortcut);
+            OnShortcutsSelected?.Invoke(shortcuts);
         }
 
         public void Initialize(Folder folder, bool draggable = true)
@@ -250,6 +269,7 @@ namespace Nekobox.AssetShortcuts
             }
 
             reorderableList = new ReorderableList(folder.Items, typeof(Shortcut), UI.IsLocked ? false : draggable, true, true, true);
+            reorderableList.multiSelect = true;
 
             UI.OnDataChanged += (_) =>
             {
@@ -295,28 +315,6 @@ namespace Nekobox.AssetShortcuts
 
                     GUI.Label(iconRect, icon);
                     GUI.Label(labelRect, label);
-                    
-                    if (!UI.IsLocked) return;
-
-                    switch (Event.current.type)
-                    {
-                        case EventType.MouseDown:
-                            if (!rect.Contains(Event.current.mousePosition)) break;
-
-                            DragAndDrop.PrepareStartDrag();
-                            DragAndDrop.objectReferences = new UnityEngine.Object[] { shortcut.Asset };
-                            DragAndDrop.SetGenericData("SourceWindow", EditorWindow.mouseOverWindow.GetInstanceID());
-                            DragAndDrop.StartDrag(Defines.LOG_PREFIX + "Dragging Start: " + label);
-                            //Event.current.Use();
-                            break;
-                        
-                        case EventType.DragUpdated:
-                            if (DragAndDrop.objectReferences.Length > 0)
-                            {
-                                DragAndDrop.visualMode = DragAndDropVisualMode.Copy;
-                            }
-                            break;
-                    }
                 }
                 catch (UnityEngine.MissingReferenceException)
                 {
@@ -333,17 +331,60 @@ namespace Nekobox.AssetShortcuts
                     GUI.Label(iconRect, EditorGUIUtility.TrIconContent("Error@2x"));
                     GUI.Label(labelRect, "Index Out of Range");
                 }
+
+                switch (Event.current.type)
+                {
+                    case EventType.MouseDown:
+                        if (!UI.IsLocked) break;
+                        if (!rect.Contains(Event.current.mousePosition)) break;
+                        
+                        DragAndDrop.PrepareStartDrag();
+                        var selectedShortcuts = reorderableList.selectedIndices
+                            .Select(i => folder.Items[i] as Shortcut)
+                            .Where(s => s != null && s.Asset != null)
+                            .ToArray();
+                        if (selectedShortcuts.Length == 0)
+                        {
+                            selectedShortcuts = new Shortcut[] { folder.Items[index] as Shortcut };
+                        }
+                        var assets = new UnityEngine.Object[selectedShortcuts.Length];
+                        for (int i = 0; i < selectedShortcuts.Length; i++)
+                        {
+                            assets[i] = selectedShortcuts[i].Asset;
+                        }
+                        DragAndDrop.objectReferences = assets;
+                        DragAndDrop.SetGenericData("SourceWindow", EditorWindow.mouseOverWindow.GetInstanceID());
+                        DragAndDrop.StartDrag(Defines.LOG_PREFIX + "Dragging Start");
+                        //Event.current.Use();
+                        break;
+                }
             };
 
             reorderableList.onSelectCallback = (reorderableList) =>
             {
                 if (reorderableList.index < 0 || folder.Items.Count <= reorderableList.index) return;
                 
-                var shortcut = folder.Items[reorderableList.index] as Shortcut;
-                if (shortcut == null || shortcut.Asset == null) return;
+                //var shortcut = folder.Items[reorderableList.index] as Shortcut;
+                //if (shortcut == null || shortcut.Asset == null) return;
                 
-                ShortcutSelected(shortcut);
-                Utils.PingAndSelectionObject(shortcut.Asset);
+                var shortcuts = reorderableList.selectedIndices
+                    .Select(i => folder.Items[i] as Shortcut)
+                    .Where(s => s != null && s.Asset != null)
+                    .ToArray();
+                
+                if (shortcuts.Length == 0)
+                {
+                    shortcuts = new Shortcut[] { folder.Items[reorderableList.index] as Shortcut };
+                }
+
+                var assets = new Object[shortcuts.Length];
+                for (int i = 0; i < shortcuts.Length; i++)
+                {
+                    assets[i] = shortcuts[i].Asset;
+                }
+                
+                NotifyShortcutsSelected(shortcuts);
+                Utils.PingAndSelectionObjects(assets);
             };
 
             reorderableList.onAddCallback = (reorderableList) =>
@@ -385,6 +426,13 @@ namespace Nekobox.AssetShortcuts
                 scrollPosition = scrollView.scrollPosition;
                 reorderableList?.DoLayoutList();
             }
+
+            rect = GUILayoutUtility.GetLastRect();
+        }
+
+        public Rect GetRect()
+        {
+            return rect;
         }
     }
 }

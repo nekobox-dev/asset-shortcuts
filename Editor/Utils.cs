@@ -56,6 +56,14 @@ namespace Nekobox.AssetShortcuts
             Selection.activeObject = obj;
             EditorGUIUtility.PingObject(obj);
         }
+
+        public static void PingAndSelectionObjects(Object[] objects)
+        {
+            if (objects == null || objects.Length == 0) return;
+
+            Selection.objects = objects;
+            EditorGUIUtility.PingObject(objects[0]);
+        }
     }
 }
 

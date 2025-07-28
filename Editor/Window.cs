@@ -14,7 +14,7 @@ namespace Nekobox.AssetShortcuts
         [SerializeField] private NarrowFolderPane narrowFolderPane;
         [SerializeField] private ShortcutPane shortcutPane;
         [SerializeField] private Folder selectedFolder;
-        [SerializeField] private Shortcut selectedShortcut;
+        [SerializeField] private Shortcut[] selectedShortcuts;
         [SerializeField] private IPane leftPane;
         [SerializeField] private IPane rightPane;
         [SerializeField] private bool isExpanded;
@@ -58,19 +58,19 @@ namespace Nekobox.AssetShortcuts
             folderPane.OnFolderSelected += (folder) => 
             {
                 selectedFolder = folder;
-                selectedShortcut = null;
+                selectedShortcuts = null;
                 shortcutPane?.Initialize(folder);
             };
             narrowFolderPane.OnFolderSelected += (folder) => 
             {
                 selectedFolder = folder;
-                selectedShortcut = null;
+                selectedShortcuts = null;
                 shortcutPane?.Initialize(folder);
             };
 
-            shortcutPane.OnShortcutSelected += (shortcut) =>
+            shortcutPane.OnShortcutsSelected += (shortcuts) =>
             {
-                selectedShortcut = shortcut;
+                selectedShortcuts = shortcuts;
             };
 
             folderPane.OnExpansionChanged += (isExpanded) =>
@@ -152,6 +152,22 @@ namespace Nekobox.AssetShortcuts
                         Data.NotifyChanges("Shortcut added");
                     }
                     break;
+                
+                //case EventType.MouseDown:
+                //    //if (!UI.IsLocked) break;
+                //    //if (!rightPane.GetRect().Contains(Event.current.mousePosition)) break;
+                //    DragAndDrop.PrepareStartDrag();
+                //    var assets = new UnityEngine.Object[selectedShortcuts.Length];
+                //    for (int i = 0; i < selectedShortcuts.Length; i++)
+                //    {
+                //        assets[i] = selectedShortcuts[i].Asset;
+                //    }
+                //    Debug.Log(assets.Length + " assets selected for drag.");
+                //    DragAndDrop.objectReferences = assets;
+                //    DragAndDrop.SetGenericData("SourceWindow", EditorWindow.mouseOverWindow.GetInstanceID());
+                //    DragAndDrop.StartDrag(Defines.LOG_PREFIX + "Dragging Start");
+                //    Event.current.Use();
+                //    break;
             }
         }
 
