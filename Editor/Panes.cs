@@ -12,6 +12,10 @@ namespace Nekobox.AssetShortcuts
     {
         public void Draw();
         public Rect GetRect();
+        public void Add();
+        public void Remove();
+        public void Select(int index);
+        public void SelectAll();
     }
 
     [System.Serializable]
@@ -86,34 +90,12 @@ namespace Nekobox.AssetShortcuts
                 FolderSelected(Data.Root.Items[list.index] as Folder);
             };
             
-            reorderableList.onAddCallback = (list) =>
-            {
-                var newFolder = new Folder();
-                newFolder.Label = $"Folder {Data.Counter}";
-                newFolder.Icon = $"sv_icon_dot{Data.Counter % 16}_pix16_gizmo";
-                newFolder.Items = new List<IListItem>();
-                
-                Undo.RecordObject(Data.instance, Defines.LOG_PREFIX + "Add Folder");
-                Data.Root.Items.Add(newFolder);
-                Data.Counter++;
-                Data.NotifyChanges("Folder added");
-            };
-
-            reorderableList.onRemoveCallback = (list) =>
-            {
-                if (list.index < 0 || Data.Root.Items.Count <= list.index) return;
-
-                Undo.RecordObject(Data.instance, Defines.LOG_PREFIX + "Remove Folder");
-                Data.Root.Items.RemoveAt(list.index);
-                Data.NotifyChanges("Folder removed");
-                FolderSelected(null);
-            };
-
+            reorderableList.onAddCallback = (_) => Add();
+            reorderableList.onRemoveCallback = (_) => Remove();
             reorderableList.onReorderCallback = (list) =>
             {
                 Data.NotifyChanges("Folder reordered");
             };
-
             reorderableList.onCanRemoveCallback = (list) =>
             {
                 return Data.Root.Items.Count > 1;
@@ -134,6 +116,65 @@ namespace Nekobox.AssetShortcuts
         public Rect GetRect()
         {
             return rect;
+        }
+
+        public void Add()
+        {
+            try
+            {
+                var newFolder = new Folder();
+                newFolder.Label = $"Folder {Data.Counter}";
+                newFolder.Icon = $"sv_icon_dot{Data.Counter % 16}_pix16_gizmo";
+                newFolder.Items = new List<IListItem>();
+                
+                Undo.RecordObject(Data.instance, Defines.LOG_PREFIX + "Add Folder");
+                Data.Root.Items.Add(newFolder);
+                Data.Counter++;
+                Data.NotifyChanges("Folder added");
+            }
+            catch (System.Exception)
+            {
+                return;
+            }
+        }
+
+        public void Remove()
+        {
+            try
+            {
+                Undo.RecordObject(Data.instance, Defines.LOG_PREFIX + "Remove Folder");
+                Data.Root.Items.RemoveAt(reorderableList.index);
+                Data.NotifyChanges("Folder removed");
+                FolderSelected(null);
+            }
+            catch (System.Exception)
+            {
+                return;
+            }
+        }
+
+        public void Select(int index)
+        {
+            try
+            {
+                reorderableList.index = index;
+            }
+            catch (System.Exception)
+            {
+                return;
+            }
+        }
+
+        public void SelectAll()
+        {
+            try
+            {
+                
+            }
+            catch (System.Exception)
+            {
+                return;
+            }
         }
     }
 
@@ -190,34 +231,12 @@ namespace Nekobox.AssetShortcuts
                 FolderSelected(Data.Root.Items[list.index] as Folder);
             };
             
-            reorderableList.onAddCallback = (list) =>
-            {
-                var newFolder = new Folder();
-                newFolder.Label = $"Folder {Data.Counter}";
-                newFolder.Icon = $"sv_icon_dot{Data.Counter % 16}_pix16_gizmo";
-                newFolder.Items = new List<IListItem>();
-                
-                Undo.RecordObject(Data.instance, Defines.LOG_PREFIX + "Add Folder");
-                Data.Root.Items.Add(newFolder);
-                Data.Counter++;
-                Data.NotifyChanges("Folder added");
-            };
-
-            reorderableList.onRemoveCallback = (list) =>
-            {
-                if (list.index < 0 || Data.Root.Items.Count <= list.index) return;
-
-                Undo.RecordObject(Data.instance, Defines.LOG_PREFIX + "Remove Folder");
-                Data.Root.Items.RemoveAt(list.index);
-                Data.NotifyChanges("Folder removed");
-                FolderSelected(null);
-            };
-
+            reorderableList.onAddCallback = (_) => Add();
+            reorderableList.onRemoveCallback = (_) => Remove();
             reorderableList.onReorderCallback = (list) =>
             {
                 Data.NotifyChanges("Folder reordered");
             };
-
             reorderableList.onCanRemoveCallback = (list) =>
             {
                 return Data.Root.Items.Count > 1;
@@ -238,6 +257,65 @@ namespace Nekobox.AssetShortcuts
         public Rect GetRect()
         {
             return rect;
+        }
+
+        public void Add()
+        {
+            try
+            {
+                var newFolder = new Folder();
+                newFolder.Label = $"Folder {Data.Counter}";
+                newFolder.Icon = $"sv_icon_dot{Data.Counter % 16}_pix16_gizmo";
+                newFolder.Items = new List<IListItem>();
+                
+                Undo.RecordObject(Data.instance, Defines.LOG_PREFIX + "Add Folder");
+                Data.Root.Items.Add(newFolder);
+                Data.Counter++;
+                Data.NotifyChanges("Folder added");
+            }
+            catch (System.Exception)
+            {
+                return;
+            }
+        }
+
+        public void Remove()
+        {
+            try
+            {
+                Undo.RecordObject(Data.instance, Defines.LOG_PREFIX + "Remove Folder");
+                Data.Root.Items.RemoveAt(reorderableList.index);
+                Data.NotifyChanges("Folder removed");
+                FolderSelected(null);
+            }
+            catch (System.Exception)
+            {
+                return;
+            }
+        }
+
+        public void Select(int index)
+        {
+            try
+            {
+                reorderableList.index = index;
+            }
+            catch (System.Exception)
+            {
+                return;
+            }
+        }
+
+        public void SelectAll()
+        {
+            try
+            {
+                
+            }
+            catch (System.Exception)
+            {
+                return;
+            }
         }
     }
 
