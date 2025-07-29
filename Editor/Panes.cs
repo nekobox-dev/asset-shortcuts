@@ -393,8 +393,6 @@ namespace Nekobox.AssetShortcuts
 
                     if (GUI.Button(lockRect, EditorGUIUtility.TrIconContent(UI.IsLocked ? "LockIcon-On" : "LockIcon"), EditorStyles.toolbarButton))
                     {
-                        Undo.RegisterCompleteObjectUndo(UI.instance, Defines.LOG_PREFIX + "UI Lock State Changed");
-                        Undo.FlushUndoRecordObjects();
                         UI.IsLocked = !UI.IsLocked;
                         UI.NotifyChanges("UI Lock State Changed");
                     }
