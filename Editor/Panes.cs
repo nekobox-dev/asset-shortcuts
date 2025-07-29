@@ -363,19 +363,25 @@ namespace Nekobox.AssetShortcuts
             reorderableList.drawHeaderCallback = (rect) =>
             {
                 var (iconRect, labelRect) = UI.GetRectListItem(rect);
-
                 var lockRect = new Rect(rect.x + rect.width - rect.height, rect.y, rect.height, rect.height);
                 labelRect.width -= rect.height;
-                
-                EditorGUI.LabelField(iconRect, EditorGUIUtility.TrIconContent(folder.Icon));
-                EditorGUI.LabelField(labelRect, folder.Label);
-
-                if (GUI.Button(lockRect, EditorGUIUtility.TrIconContent(UI.IsLocked ? "LockIcon-On" : "LockIcon"), EditorStyles.toolbarButton))
+                try
                 {
-                    UI.IsLocked = !UI.IsLocked;
+                    EditorGUI.LabelField(iconRect, EditorGUIUtility.TrIconContent(folder.Icon));
+                    EditorGUI.LabelField(labelRect, folder.Label);
 
-                    Undo.RecordObject(UI.instance, Defines.LOG_PREFIX + "UI Lock State Changed");
-                    UI.NotifyChanges("UI Lock State Changed");
+                    if (GUI.Button(lockRect, EditorGUIUtility.TrIconContent(UI.IsLocked ? "LockIcon-On" : "LockIcon"), EditorStyles.toolbarButton))
+                    {
+                        UI.IsLocked = !UI.IsLocked;
+
+                        Undo.RecordObject(UI.instance, Defines.LOG_PREFIX + "UI Lock State Changed");
+                        UI.NotifyChanges("UI Lock State Changed");
+                    }
+                }
+                catch (System.Exception)
+                {
+                    EditorGUI.LabelField(iconRect, EditorGUIUtility.TrIconContent("Error@2x"));
+                    EditorGUI.LabelField(labelRect, "Error Folder");
                 }
             };
 
