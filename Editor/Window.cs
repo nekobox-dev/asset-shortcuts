@@ -55,40 +55,40 @@ namespace Nekobox.AssetShortcuts
 
             leftPane = isExpanded ? folderPane : narrowFolderPane;
             rightPane = shortcutPane;
-            focusedPane = leftPane;
+            focusedPane = shortcutPane;
 
             folderPane.OnFolderSelected += (folder) => 
             {
                 selectedFolder = folder;
                 selectedShortcuts = null;
                 shortcutPane?.Initialize(folder);
-                focusedPane = folderPane;
+                //focusedPane = folderPane;
             };
             narrowFolderPane.OnFolderSelected += (folder) => 
             {
                 selectedFolder = folder;
                 selectedShortcuts = null;
                 shortcutPane?.Initialize(folder);
-                focusedPane = narrowFolderPane;
+                //focusedPane = narrowFolderPane;
             };
 
             shortcutPane.OnShortcutsSelected += (shortcuts) =>
             {
                 selectedShortcuts = shortcuts;
-                focusedPane = shortcutPane;
+                //focusedPane = shortcutPane;
             };
 
             folderPane.OnExpansionChanged += (isExpanded) =>
             {
                 this.isExpanded = isExpanded;
                 leftPane = isExpanded ? folderPane : narrowFolderPane;
-                focusedPane = leftPane;
+                //focusedPane = leftPane;
             };
             narrowFolderPane.OnExpansionChanged += (isExpanded) =>
             {
                 this.isExpanded = isExpanded;
                 leftPane = isExpanded ? folderPane : narrowFolderPane;
-                focusedPane = leftPane;
+                //focusedPane = leftPane;
             };
 
             Data.OnDataChanged += (_) => this.Repaint();
