@@ -59,27 +59,35 @@ namespace Nekobox.AssetShortcuts
             reorderableList.drawElementCallback = (rect, index, isActive, isFocused) =>
             {
                 var (iconRect, labelRect) = UI.GetRectListItem(rect);
-                var folder = Data.Root.Items[index] as Folder;
-
-                if (GUI.Button(iconRect, EditorGUIUtility.TrIconContent(folder.Icon)))
+                try
                 {
-                    var popupRect = new Rect(rect.x, rect.y + rect.height, 1, 1);
-                    var content = new PopupIconSelector();
+                    var folder = Data.Root.Items[index] as Folder;
 
-                    content.OnIconSelected += (icon) =>
+                    if (GUI.Button(iconRect, EditorGUIUtility.TrIconContent(folder.Icon)))
                     {
-                        Undo.RecordObject(Data.instance, Defines.LOG_PREFIX + "Folder icon changed");
-                        folder.Icon = icon;
-                        Data.NotifyChanges("Folder icon changed");
-                    };
-                    PopupWindow.Show(popupRect, content);
+                        var popupRect = new Rect(rect.x, rect.y + rect.height, 1, 1);
+                        var content = new PopupIconSelector();
+
+                        content.OnIconSelected += (icon) =>
+                        {
+                            Undo.RecordObject(Data.instance, Defines.LOG_PREFIX + "Folder icon changed");
+                            folder.Icon = icon;
+                            Data.NotifyChanges("Folder icon changed");
+                        };
+                        PopupWindow.Show(popupRect, content);
+                    }
+                    var text = EditorGUI.DelayedTextField(labelRect, folder.Label);
+                    if (text != folder.Label)
+                    {
+                        Undo.RecordObject(Data.instance, Defines.LOG_PREFIX + "Folder label changed");
+                        folder.Label = text;
+                        Data.NotifyChanges("Folder label changed");
+                    }
                 }
-                var text = EditorGUI.DelayedTextField(labelRect, folder.Label);
-                if (text != folder.Label)
+                catch (System.Exception)
                 {
-                    Undo.RecordObject(Data.instance, Defines.LOG_PREFIX + "Folder label changed");
-                    folder.Label = text;
-                    Data.NotifyChanges("Folder label changed");
+                    EditorGUI.LabelField(iconRect, EditorGUIUtility.TrIconContent("Error@2x"));
+                    EditorGUI.LabelField(labelRect, "Error Folder");
                 }
             };
 
@@ -222,9 +230,16 @@ namespace Nekobox.AssetShortcuts
             reorderableList.drawElementCallback = (rect, index, isActive, isFocused) =>
             {
                 var (iconRect, labelRect) = UI.GetRectListItem(rect);
-                var folder = Data.Root.Items[index] as Folder;
+                try
+                {
+                    var folder = Data.Root.Items[index] as Folder;
 
-                EditorGUI.LabelField(iconRect, EditorGUIUtility.TrIconContent(folder.Icon));
+                    EditorGUI.LabelField(iconRect, EditorGUIUtility.TrIconContent(folder.Icon));
+                }
+                catch (System.Exception)
+                {
+                    EditorGUI.LabelField(iconRect, EditorGUIUtility.TrIconContent("Error@2x"));
+                }
             };
 
             reorderableList.onSelectCallback = (list) =>
