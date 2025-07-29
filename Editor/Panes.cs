@@ -131,6 +131,9 @@ namespace Nekobox.AssetShortcuts
                 Data.Root.Items.Add(newFolder);
                 Data.Counter++;
                 Data.NotifyChanges("Folder added");
+
+                reorderableList.Select(reorderableList.count - 1);
+                FolderSelected(Data.Root.Items[reorderableList.count - 1] as Folder);
             }
             catch (System.Exception)
             {
@@ -272,6 +275,9 @@ namespace Nekobox.AssetShortcuts
                 Data.Root.Items.Add(newFolder);
                 Data.Counter++;
                 Data.NotifyChanges("Folder added");
+
+                reorderableList.Select(reorderableList.count - 1);
+                FolderSelected(Data.Root.Items[reorderableList.count - 1] as Folder);
             }
             catch (System.Exception)
             {
@@ -531,6 +537,15 @@ namespace Nekobox.AssetShortcuts
                     reorderableList.list.Add(shortcut);
                 }
                 Data.NotifyChanges("Shortcut added");
+
+                if (Selection.objects.Length == 1)
+                {
+                    reorderableList.index = reorderableList.count - 1;
+                }
+                else
+                {
+                    reorderableList.SelectRange(reorderableList.count - Selection.objects.Length, reorderableList.count - 1);
+                }
             }
             catch (System.Exception)
             {
