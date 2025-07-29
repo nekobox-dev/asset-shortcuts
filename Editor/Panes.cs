@@ -70,7 +70,8 @@ namespace Nekobox.AssetShortcuts
 
                         content.OnIconSelected += (icon) =>
                         {
-                            Undo.RecordObject(Data.instance, Defines.LOG_PREFIX + "Folder icon changed");
+                            Undo.RegisterCompleteObjectUndo(Data.instance, Defines.LOG_PREFIX + "Folder icon changed");
+                            Undo.FlushUndoRecordObjects();
                             folder.Icon = icon;
                             Data.NotifyChanges("Folder icon changed");
                         };
@@ -79,7 +80,8 @@ namespace Nekobox.AssetShortcuts
                     var text = EditorGUI.DelayedTextField(labelRect, folder.Label);
                     if (text != folder.Label)
                     {
-                        Undo.RecordObject(Data.instance, Defines.LOG_PREFIX + "Folder label changed");
+                        Undo.RegisterCompleteObjectUndo(Data.instance, Defines.LOG_PREFIX + "Folder label changed");
+                        Undo.FlushUndoRecordObjects();
                         folder.Label = text;
                         Data.NotifyChanges("Folder label changed");
                     }
@@ -135,7 +137,8 @@ namespace Nekobox.AssetShortcuts
                 newFolder.Icon = $"sv_icon_dot{Data.Counter % 16}_pix16_gizmo";
                 newFolder.Items = new List<IListItem>();
                 
-                Undo.RecordObject(Data.instance, Defines.LOG_PREFIX + "Add Folder");
+                Undo.RegisterCompleteObjectUndo(Data.instance, Defines.LOG_PREFIX + "Add Folder");
+                Undo.FlushUndoRecordObjects();
                 Data.Root.Items.Add(newFolder);
                 Data.Counter++;
                 Data.NotifyChanges("Folder added");
@@ -153,7 +156,8 @@ namespace Nekobox.AssetShortcuts
         {
             try
             {
-                Undo.RecordObject(Data.instance, Defines.LOG_PREFIX + "Remove Folder");
+                Undo.RegisterCompleteObjectUndo(Data.instance, Defines.LOG_PREFIX + "Remove Folder");
+                Undo.FlushUndoRecordObjects();
                 Data.Root.Items.RemoveAt(reorderableList.index);
                 Data.NotifyChanges("Folder removed");
                 FolderSelected(null);
@@ -286,7 +290,8 @@ namespace Nekobox.AssetShortcuts
                 newFolder.Icon = $"sv_icon_dot{Data.Counter % 16}_pix16_gizmo";
                 newFolder.Items = new List<IListItem>();
                 
-                Undo.RecordObject(Data.instance, Defines.LOG_PREFIX + "Add Folder");
+                Undo.RegisterCompleteObjectUndo(Data.instance, Defines.LOG_PREFIX + "Add Folder");
+                Undo.FlushUndoRecordObjects();
                 Data.Root.Items.Add(newFolder);
                 Data.Counter++;
                 Data.NotifyChanges("Folder added");
@@ -304,7 +309,8 @@ namespace Nekobox.AssetShortcuts
         {
             try
             {
-                Undo.RecordObject(Data.instance, Defines.LOG_PREFIX + "Remove Folder");
+                Undo.RegisterCompleteObjectUndo(Data.instance, Defines.LOG_PREFIX + "Remove Folder");
+                Undo.FlushUndoRecordObjects();
                 Data.Root.Items.RemoveAt(reorderableList.index);
                 Data.NotifyChanges("Folder removed");
                 FolderSelected(null);
@@ -387,9 +393,9 @@ namespace Nekobox.AssetShortcuts
 
                     if (GUI.Button(lockRect, EditorGUIUtility.TrIconContent(UI.IsLocked ? "LockIcon-On" : "LockIcon"), EditorStyles.toolbarButton))
                     {
+                        Undo.RegisterCompleteObjectUndo(UI.instance, Defines.LOG_PREFIX + "UI Lock State Changed");
+                        Undo.FlushUndoRecordObjects();
                         UI.IsLocked = !UI.IsLocked;
-
-                        Undo.RecordObject(UI.instance, Defines.LOG_PREFIX + "UI Lock State Changed");
                         UI.NotifyChanges("UI Lock State Changed");
                     }
                 }
@@ -552,7 +558,8 @@ namespace Nekobox.AssetShortcuts
             {
                 if (Selection.objects == null || Selection.objects.Length == 0) return;
 
-                Undo.RecordObject(Data.instance, Defines.LOG_PREFIX + "Add Shortcut");
+                Undo.RegisterCompleteObjectUndo(Data.instance, Defines.LOG_PREFIX + "Add Shortcut");
+                Undo.FlushUndoRecordObjects();
                 foreach (var obj in Selection.objects)
                 {
                     var shortcut = new Shortcut();
@@ -583,7 +590,8 @@ namespace Nekobox.AssetShortcuts
         {
             try
             {
-                Undo.RecordObject(Data.instance, Defines.LOG_PREFIX + "Remove Shortcut");
+                Undo.RegisterCompleteObjectUndo(Data.instance, Defines.LOG_PREFIX + "Remove Shortcut");
+                Undo.FlushUndoRecordObjects();
                 int[] deleteIndexes = reorderableList.selectedIndices.Count > 0 ? reorderableList.selectedIndices.Reverse<int>().ToArray() : new[] { reorderableList.index };
                 int lastdeletedIndex = -1;
                 foreach (var index in deleteIndexes)

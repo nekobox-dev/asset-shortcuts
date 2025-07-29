@@ -92,13 +92,13 @@ namespace Nekobox.AssetShortcuts
             };
 
             Data.OnDataChanged += (_) => this.Repaint();
-            Undo.willFlushUndoRecord += () => Data.NotifyChanges("UndoRedo");
+            Undo.undoRedoPerformed += () => Data.NotifyChanges("UndoRedo Performed");
         }
 
         public void OnDisable()
         {
             Data.OnDataChanged -= (_) => this.Repaint();
-            Undo.willFlushUndoRecord -= () => Data.NotifyChanges("UndoRedo");
+            Undo.undoRedoPerformed -= () => Data.NotifyChanges("UndoRedo Performed");
         }
 
         public void OnGUI()
@@ -150,14 +150,15 @@ namespace Nekobox.AssetShortcuts
 
                     DragAndDrop.AcceptDrag();
 
-                    Undo.RecordObject(Data.instance, Defines.LOG_PREFIX + "Shortcut added");
+                    Undo.RegisterCompleteObjectUndo(Data.instance, Defines.LOG_PREFIX + "Shortcut added");
+                    Undo.FlushUndoRecordObjects();
                     foreach (var obj in DragAndDrop.objectReferences)
                     {
                         var shortcut = new Shortcut();
                         shortcut.Asset = obj;
                         selectedFolder.Items.Add(shortcut);
-                        Data.NotifyChanges("Shortcut added");
                     }
+                    Data.NotifyChanges("Shortcut added");
                     break;
             }
         }
