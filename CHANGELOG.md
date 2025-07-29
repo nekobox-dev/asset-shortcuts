@@ -1,6 +1,15 @@
 Asset Shortcuts
 ===
 
+v1.0.4 - 2025/07/29
+---
+- Add support multi select
+- Add support multi select drag & drop
+- Add support shortcuts Add/Remove/Select/SelectAll
+- Add handle some exceptions
+- Fix do not ping and selection when locked
+- Refactor some unused code
+
 v1.0.3 - 2025/07/21
 ---
 - Fix drag & drop judging only on icons
