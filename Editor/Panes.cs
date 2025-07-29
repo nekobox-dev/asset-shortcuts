@@ -421,6 +421,11 @@ namespace Nekobox.AssetShortcuts
                     GUI.Label(iconRect, EditorGUIUtility.TrIconContent("Error@2x"));
                     GUI.Label(labelRect, "Index Out of Range");
                 }
+                catch (System.Exception)
+                {
+                    GUI.Label(iconRect, EditorGUIUtility.TrIconContent("Error@2x"));
+                    GUI.Label(labelRect, "Unknown Error");
+                }
 
                 switch (Event.current.type)
                 {
