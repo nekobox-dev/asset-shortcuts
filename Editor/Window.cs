@@ -18,6 +18,7 @@ namespace Nekobox.AssetShortcuts
         [SerializeField] private Shortcut[] selectedShortcuts;
         [SerializeField] private IPane leftPane;
         [SerializeField] private IPane rightPane;
+        [SerializeField] private IPane focusedPane;
         [SerializeField] private bool isExpanded;
 
         [MenuItem(Defines.MENU_PATH)]
@@ -54,35 +55,40 @@ namespace Nekobox.AssetShortcuts
 
             leftPane = isExpanded ? folderPane : narrowFolderPane;
             rightPane = shortcutPane;
-
+            focusedPane = leftPane;
 
             folderPane.OnFolderSelected += (folder) => 
             {
                 selectedFolder = folder;
                 selectedShortcuts = null;
                 shortcutPane?.Initialize(folder);
+                focusedPane = folderPane;
             };
             narrowFolderPane.OnFolderSelected += (folder) => 
             {
                 selectedFolder = folder;
                 selectedShortcuts = null;
                 shortcutPane?.Initialize(folder);
+                focusedPane = narrowFolderPane;
             };
 
             shortcutPane.OnShortcutsSelected += (shortcuts) =>
             {
                 selectedShortcuts = shortcuts;
+                focusedPane = shortcutPane;
             };
 
             folderPane.OnExpansionChanged += (isExpanded) =>
             {
                 this.isExpanded = isExpanded;
                 leftPane = isExpanded ? folderPane : narrowFolderPane;
+                focusedPane = leftPane;
             };
             narrowFolderPane.OnExpansionChanged += (isExpanded) =>
             {
                 this.isExpanded = isExpanded;
                 leftPane = isExpanded ? folderPane : narrowFolderPane;
+                focusedPane = leftPane;
             };
 
             Data.OnDataChanged += (_) => this.Repaint();
@@ -187,6 +193,26 @@ namespace Nekobox.AssetShortcuts
             if (window == null) return;
             if (window.shortcutPane == null) return;
             window.shortcutPane.SelectAll();
+            window.Repaint();
+        }
+
+        [Shortcut("Add New / Local", typeof(Window), KeyCode.N, ShortcutModifiers.Action)]
+        public static void AddNew()
+        {
+            var window = EditorWindow.focusedWindow as Window;
+            if (window == null) return;
+
+            window.focusedPane?.Add();
+            window.Repaint();
+        }
+
+        [Shortcut("Remove Selected / Local", typeof(Window), KeyCode.D, ShortcutModifiers.Action)]
+        public static void RemoveSelected()
+        {
+            var window = EditorWindow.focusedWindow as Window;
+            if (window == null) return;
+
+            window.focusedPane?.Remove();
             window.Repaint();
         }
     }
