@@ -160,6 +160,11 @@ namespace Nekobox.AssetShortcuts
                     }
                     Data.NotifyChanges("Shortcut added");
                     break;
+                
+                case EventType.MouseDown:
+                    Selection.activeObject = null;
+                    Event.current.Use();
+                    break;
             }
         }
 
