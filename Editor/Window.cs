@@ -129,6 +129,7 @@ namespace Nekobox.AssetShortcuts
                     if (DragAndDrop.objectReferences.Length == 0) break;
 
                     DragAndDrop.visualMode = DragAndDropVisualMode.Copy;
+                    Event.current.Use();
                     break;
 
                 case EventType.DragPerform:
@@ -159,6 +160,7 @@ namespace Nekobox.AssetShortcuts
                         selectedFolder.Items.Add(shortcut);
                     }
                     Data.NotifyChanges("Shortcut added");
+                    Event.current.Use();
                     break;
                 
                 case EventType.MouseDown:
