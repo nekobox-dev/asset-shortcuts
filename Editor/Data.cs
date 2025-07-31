@@ -1,8 +1,10 @@
 #if UNITY_EDITOR
 
+using System;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Nekobox.AssetShortcuts
 {
@@ -12,7 +14,7 @@ namespace Nekobox.AssetShortcuts
         public string Icon { get; set; }
     }
 
-    [System.Serializable]
+    [Serializable]
     public class Shortcut : IListItem
     {
         [SerializeReference] private Object asset;
@@ -24,7 +26,7 @@ namespace Nekobox.AssetShortcuts
         public string Icon { get => icon; set => icon = value; }
     }
 
-    [System.Serializable]
+    [Serializable]
     public class Folder : IListItem
     {
         [SerializeReference] private List<IListItem> items;
@@ -39,7 +41,7 @@ namespace Nekobox.AssetShortcuts
     [FilePath(Defines.SAVE_FOLDER_PATH + "Data.dat", FilePathAttribute.Location.ProjectFolder)]
     public class Data : ScriptableSingleton<Data>
     {
-        public static event System.Action<string> OnDataChanged;
+        public static event Action<string> OnDataChanged;
         public static void NotifyChanges(string name)
         {
             //instance.Save(true);

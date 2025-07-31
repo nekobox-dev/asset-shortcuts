@@ -1,9 +1,11 @@
 #if UNITY_EDITOR
 
+using System;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Nekobox.AssetShortcuts
 {
@@ -18,7 +20,7 @@ namespace Nekobox.AssetShortcuts
         [SerializeField] private float textSizeMax = 16;
         [SerializeField] private bool isLocked = false;
         
-        public static event System.Action<string> OnDataChanged;
+        public static event Action<string> OnDataChanged;
         public static void NotifyChanges(string name)
         {
             OnDataChanged?.Invoke(name);

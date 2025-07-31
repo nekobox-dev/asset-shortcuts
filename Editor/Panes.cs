@@ -1,10 +1,12 @@
 #if UNITY_EDITOR
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Nekobox.AssetShortcuts
 {
@@ -20,20 +22,20 @@ namespace Nekobox.AssetShortcuts
         public int GetIndex();
     }
 
-    [System.Serializable]
+    [Serializable]
     public class FolderPane : IPane
     {
         [SerializeField] private Rect rect;
         [SerializeField] private Vector2 scrollPosition;
         [SerializeField] private ReorderableList reorderableList;
         
-        public event System.Action<Folder> OnFolderSelected;
+        public event Action<Folder> OnFolderSelected;
         public void FolderSelected(Folder folder)
         {
             OnFolderSelected?.Invoke(folder);
         }
 
-        public event System.Action<bool> OnExpansionChanged;
+        public event Action<bool> OnExpansionChanged;
         public void ExpansionChanged(bool isExpanded)
         {
             OnExpansionChanged?.Invoke(isExpanded);
@@ -88,7 +90,7 @@ namespace Nekobox.AssetShortcuts
                         Data.NotifyChanges("Folder label changed");
                     }
                 }
-                catch (System.Exception)
+                catch (Exception)
                 {
                     EditorGUI.LabelField(iconRect, EditorGUIUtility.TrIconContent("Error@2x"));
                     EditorGUI.LabelField(labelRect, "Error Folder");
@@ -212,20 +214,20 @@ namespace Nekobox.AssetShortcuts
         }
     }
 
-    [System.Serializable]
+    [Serializable]
     public class NarrowFolderPane : IPane
     {
         [SerializeField] private Rect rect;
         [SerializeField] private Vector2 scrollPosition;
         [SerializeField] private ReorderableList reorderableList;
 
-        public event System.Action<Folder> OnFolderSelected;
+        public event Action<Folder> OnFolderSelected;
         public void FolderSelected(Folder folder)
         {
             OnFolderSelected?.Invoke(folder);
         }
 
-        public event System.Action<bool> OnExpansionChanged;
+        public event Action<bool> OnExpansionChanged;
         public void ExpansionChanged(bool isExpanded)
         {
             OnExpansionChanged?.Invoke(isExpanded);
@@ -382,14 +384,14 @@ namespace Nekobox.AssetShortcuts
         }
     }
 
-    [System.Serializable]
+    [Serializable]
     public class ShortcutPane : IPane
     {
         [SerializeField] private Rect rect;
         [SerializeField] private Vector2 scrollPosition;
         [SerializeField] private ReorderableList reorderableList;
         
-        public event System.Action<Shortcut[]> OnShortcutsSelected;
+        public event Action<Shortcut[]> OnShortcutsSelected;
         public void NotifyShortcutsSelected(Shortcut[] shortcuts)
         {
             OnShortcutsSelected?.Invoke(shortcuts);

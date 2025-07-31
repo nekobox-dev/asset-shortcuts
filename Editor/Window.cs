@@ -1,14 +1,16 @@
 #if UNITY_EDITOR
 
+using System;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.ShortcutManagement;
 using UnityEditorInternal;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Nekobox.AssetShortcuts
 {
-    [System.Serializable]
+    [Serializable]
     public class Window : EditorWindow, IHasCustomMenu
     {
         [SerializeField] private FolderPane folderPane;
