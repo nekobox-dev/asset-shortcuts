@@ -651,6 +651,10 @@ namespace Nekobox.AssetShortcuts
                 //if (index < 0 || index >= reorderableList.count) return;
 
                 reorderableList.index = index;
+                var shortcut = reorderableList.list[0] as Shortcut;
+                var asset = shortcut.Asset;
+                EditorGUIUtility.PingObject(asset);
+                Selection.activeObject = asset;
             }
             catch (System.Exception)
             {
