@@ -16,6 +16,8 @@ namespace Nekobox.AssetShortcuts
         public void Remove();
         public void Select(int index);
         public void SelectAll();
+        public void Focus();
+        public int GetIndex();
     }
 
     [System.Serializable]
@@ -191,6 +193,23 @@ namespace Nekobox.AssetShortcuts
                 return;
             }
         }
+
+        public void Focus()
+        {
+            try
+            {
+                reorderableList?.GrabKeyboardFocus();
+            }
+            catch (System.Exception)
+            {
+
+            }
+        }
+
+        public int GetIndex()
+        {
+            return reorderableList.selectedIndices.Count > 0 ? reorderableList.selectedIndices[0] : -1;
+        }
     }
 
     [System.Serializable]
@@ -343,6 +362,23 @@ namespace Nekobox.AssetShortcuts
             {
                 return;
             }
+        }
+
+        public void Focus()
+        {
+            try
+            {
+                reorderableList?.GrabKeyboardFocus();
+            }
+            catch (System.Exception)
+            {
+
+            }
+        }
+
+        public int GetIndex()
+        {
+            return reorderableList.selectedIndices.Count > 0 ? reorderableList.selectedIndices[0] : -1;
         }
     }
 
@@ -635,6 +671,23 @@ namespace Nekobox.AssetShortcuts
             
             NotifyShortcutsSelected(shortcuts);
             Selection.objects = assets;
+        }
+
+        public void Focus()
+        {
+            try
+            {
+                reorderableList?.GrabKeyboardFocus();
+            }
+            catch (System.Exception)
+            {
+
+            }
+        }
+
+        public int GetIndex()
+        {
+            return reorderableList.selectedIndices.Count > 0 ? reorderableList.selectedIndices[0] : -1;
         }
     }
 }

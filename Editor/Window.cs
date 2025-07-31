@@ -103,6 +103,26 @@ namespace Nekobox.AssetShortcuts
 
         public void OnGUI()
         {
+            if (Event.current.type == EventType.KeyDown)
+            {
+                var index = 0;
+                switch (Event.current.keyCode)
+                {
+                    case KeyCode.LeftArrow:
+                        index = leftPane.GetIndex();
+                        leftPane.Focus();
+                        leftPane.Select(index != -1 ? index : 0);
+                        Event.current.Use();
+                        break;
+                    case KeyCode.RightArrow:
+                        index = rightPane.GetIndex();
+                        rightPane.Focus();
+                        rightPane.Select(index != -1 ? index : 0);
+                        Event.current.Use();
+                        break;
+                }
+            }
+
             using (new EditorGUILayout.HorizontalScope())
             {
                 leftPane.Draw();
