@@ -1,6 +1,13 @@
 Asset Shortcuts
 ===
 
+v1.0.5 - 2025/08/01
+---
+- Add support Undo/Redo for data changes
+- Add support pane switching by left/right arrows
+- Add support deselection by clicking outside the list
+- Refactor using System to simplify code and avoid Object conflicts
+
 v1.0.4 - 2025/07/29
 ---
 - Add support multi select
