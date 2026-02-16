@@ -1,6 +1,10 @@
 Asset Shortcuts
 ===
 
+v1.0.6 - 2026/02/16
+---
+- Fix so changes to the pane are applied immediately after startup
+
 v1.0.5 - 2025/08/01
 ---
 - Add support Undo/Redo for data changes
