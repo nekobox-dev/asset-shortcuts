@@ -42,10 +42,8 @@ namespace Nekobox.AssetShortcuts
                 Data.Root.Items.Add(folder);
             }
 
-            if (selectedFolder == null && Data.Root.Items.Count > 0)
-            {
-                selectedFolder = Data.Root.Items[0] as Folder;
-            }
+            selectedFolder = Data.Root.Items[0] as Folder;
+            selectedShortcuts = null;
 
             folderPane = new FolderPane();
             narrowFolderPane = new NarrowFolderPane();
