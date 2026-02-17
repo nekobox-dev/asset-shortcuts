@@ -57,38 +57,31 @@ namespace Nekobox.AssetShortcuts
             rightPane = shortcutPane;
             focusedPane = shortcutPane;
 
-            folderPane.OnFolderSelected += (folder) => 
+            var onFolderSelected = new Action<Folder>((folder) =>
             {
                 selectedFolder = folder;
                 selectedShortcuts = null;
-                shortcutPane?.Initialize(folder);
-                //focusedPane = folderPane;
-            };
-            narrowFolderPane.OnFolderSelected += (folder) => 
+                shortcutPane.Initialize(folder);
+                //focusedPane = shortcutPane;
+            });
+
+            folderPane.OnFolderSelected += onFolderSelected;
+            narrowFolderPane.OnFolderSelected += onFolderSelected;
+
+            var onExpansionChanged = new Action<bool>((isExpanded) =>
             {
-                selectedFolder = folder;
-                selectedShortcuts = null;
-                shortcutPane?.Initialize(folder);
-                //focusedPane = narrowFolderPane;
-            };
+                this.isExpanded = isExpanded;
+                leftPane = isExpanded ? folderPane : narrowFolderPane;
+                //focusedPane = leftPane;
+            });
+
+            folderPane.OnExpansionChanged += onExpansionChanged;
+            narrowFolderPane.OnExpansionChanged += onExpansionChanged;
 
             shortcutPane.OnShortcutsSelected += (shortcuts) =>
             {
                 selectedShortcuts = shortcuts;
                 //focusedPane = shortcutPane;
-            };
-
-            folderPane.OnExpansionChanged += (isExpanded) =>
-            {
-                this.isExpanded = isExpanded;
-                leftPane = isExpanded ? folderPane : narrowFolderPane;
-                //focusedPane = leftPane;
-            };
-            narrowFolderPane.OnExpansionChanged += (isExpanded) =>
-            {
-                this.isExpanded = isExpanded;
-                leftPane = isExpanded ? folderPane : narrowFolderPane;
-                //focusedPane = leftPane;
             };
 
             Data.OnDataChanged += (_) => this.Repaint();
